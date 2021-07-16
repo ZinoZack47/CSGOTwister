@@ -4,10 +4,13 @@ import com.sun.jna.Memory;
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Kernel32;
+import com.sun.jna.platform.win32.Tlhelp32;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
+import com.sun.jna.platform.win32.WinDef.DWORD;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.W32APIOptions;
+import com.sun.jna.platform.win32.WinBase;
 
 public final class MemManager
 {
@@ -18,15 +21,62 @@ public final class MemManager
     private final static int PROCESS_VM_WRITE = 0x0020;
     private final static int PROCESS_VM_OPERATION = 0x0008;
 
-    private static HANDLE hProc = null;
+    private HANDLE hProc = null;
+    private Pointer pClient = null;
+    private DWORD dwClientSize = null;
 
     private MemManager() {
-        hProc = MemManager.OpenProcess(MemManager.GetProcessId("csgo.exe"));
+        int pid = GetProcessId("csgo.exe");
+        hProc = OpenProcess(pid);
+        Tlhelp32.MODULEENTRY32W modClient = CatchModule(pid, "client.dll");
+
+        if(modClient == null)
+        {
+            System.out.println("Couldn't find client module");
+            System.exit(1);
+        }
+
+        pClient = modClient.modBaseAddr;
+        dwClientSize = modClient.dwSize;
     }
 
-    public HANDLE ProcHandle()
+    public Pointer Client()
+    {
+        return pClient;
+    }
+
+    public long ClientSize()
+    {
+        return dwClientSize.longValue();
+    }
+
+    public HANDLE Proc()
     {
         return hProc;
+    }
+
+    private Tlhelp32.MODULEENTRY32W CatchModule(int pid, String module)
+    {
+        Tlhelp32.MODULEENTRY32W MEntry = new Tlhelp32.MODULEENTRY32W.ByReference();
+        HANDLE hHandle = Kernel32.INSTANCE.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPMODULE, new DWORD(pid));
+
+        if (hHandle == WinBase.INVALID_HANDLE_VALUE) {
+            return null;
+        }
+
+        Tlhelp32.MODULEENTRY32W match = null;
+
+        if (Kernel32.INSTANCE.Module32FirstW(hHandle, MEntry)) {
+            do {
+                if (module.equals(new String(MEntry.szModule))) {
+                    match = MEntry;
+                    break;
+                }
+            } while (Kernel32.INSTANCE.Module32NextW(hHandle, MEntry));
+        }
+
+        Kernel32.INSTANCE.CloseHandle(hHandle);
+        return match;
     }
 
     private static int GetProcessId(String window)
