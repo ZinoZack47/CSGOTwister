@@ -1,7 +1,6 @@
 package com.csgo.Features;
 
 import com.sun.jna.Pointer;
-import com.sun.jna.platform.win32.WinDef.DWORD;
 
 import com.csgo.Mem.*;
 
