@@ -7,22 +7,40 @@ import com.csgo.Mem.*;
 /**
  * Radar
  */
-public class Radar extends Offsets {
+public class Radar extends Offsets
+{
     private Radar() {}
 
     public static void Execute()
     {
-        for(int i = 1; i <= 64; i++)
-        {
-            Pointer LocalPlayer = MemManager.Get().Client().getPointer(dwLocalPlayer);
+        Pointer LocalPlayer = MemManager.Get().Client().getPointer(dwLocalPlayer);
+        int iTeam = LocalPlayer.getInt(m_iTeamNum);
 
-            int iTeam = LocalPlayer.getInt(m_iTeamNum);
-            int bDormant = LocalPlayer.getInt(m_bDormant);
+        for(int i = 1; i <= 32; i++)
+        {
+            Pointer Player = MemManager.Get().Client().getPointer(dwEntityList + (i - 1) * 0x10);
+
+            int bDormant = Player.getInt(m_bDormant);
 
             if(bDormant == 1)
                 continue;
 
-            System.out.println("Teamid : " + iTeam);
+            int iPlayerTeam = Player.getInt(m_iTeamNum);
+
+            if(iPlayerTeam == 1 || iPlayerTeam == iTeam)
+                continue;
+
+            int iPlayerHealth = Player.getInt(m_iHealth);
+
+            if(iPlayerHealth <= 0)
+                continue;
+
+            int bPlayerSpotted = Player.getInt(m_bSpotted);
+
+            if(bPlayerSpotted == 1)
+                continue;
+
+            Player.setInt(m_bSpotted, 1);
         }
     }
 

@@ -118,7 +118,7 @@
                     <archive>
                     <manifest>
                         <mainClass>
-                            com.baeldung.executable.ExecutableMavenJar
+                            com.csgo.App
                         </mainClass>
                     </manifest>
                     </archive>

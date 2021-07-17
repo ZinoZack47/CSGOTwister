@@ -15,7 +15,7 @@ public final class App
             if((User32.INSTANCE.GetAsyncKeyState(Win32VK.VK_MENU.code) & 0x8000) != 0)
             {
                 Radar.Execute();
-                Thread.sleep(10);
+                Thread.sleep(200);
             }
         }
     }
