@@ -26,18 +26,11 @@ public class Radar extends Offsets
                 continue;
 
             int iPlayerTeam = Player.getInt(m_iTeamNum);
-
-            if(iPlayerTeam == 1 || iPlayerTeam == iTeam)
-                continue;
-
             int iPlayerHealth = Player.getInt(m_iHealth);
-
-            if(iPlayerHealth <= 0)
-                continue;
-
             int bPlayerSpotted = Player.getInt(m_bSpotted);
 
-            if(bPlayerSpotted == 1)
+            if(iPlayerTeam == 1 || iPlayerTeam == iTeam
+            || iPlayerHealth <= 0 || bPlayerSpotted == 1)
                 continue;
 
             Player.setInt(m_bSpotted, 1);
