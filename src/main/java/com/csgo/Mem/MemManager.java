@@ -26,19 +26,18 @@ public final class MemManager
     private HANDLE hProc = null;
     private Pointer pClient = null;
     private DWORD dwClientSize = null;
-    private DWORD dwPid = null;
+    private int iPid = -1;
 
-    private MemManager() {
+    private MemManager()
+    {
 
-        CatchGame(szTarget);
-
-        if(hProc == null)
+        if(!CatchGame(szTarget))
         {
             System.out.println("Couldn't find " + szTarget);
             System.exit(1);
         }
 
-        Tlhelp32.MODULEENTRY32W modClient = CatchModule(dwPid.intValue(), "client.dll");
+        Tlhelp32.MODULEENTRY32W modClient = CatchModule(iPid, "client.dll");
 
         if(modClient == null)
         {
@@ -89,22 +88,32 @@ public final class MemManager
         return match;
     }
 
-    private void CatchGame(String process)
+    private boolean CatchGame(String process)
     {
         Tlhelp32.PROCESSENTRY32 MEntry = new Tlhelp32.PROCESSENTRY32.ByReference();
-        HANDLE hHandle = Kernel32.INSTANCE.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPMODULE, null);
-        if (Kernel32.INSTANCE.Process32First(hHandle, MEntry)) {
-            do {
-                if (process.equals(new String(MEntry.szExeFile))) {
-                    dwPid = MEntry.th32ProcessID;
+        HANDLE hHandle = Kernel32.INSTANCE.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPMODULE, new DWORD());
+
+        try
+        {
+            while (Kernel32.INSTANCE.Process32Next(hHandle, MEntry))
+            {
+                System.out.println(new String(MEntry.szExeFile));
+                if (process.equals(new String(MEntry.szExeFile)))
+                {
+                    iPid = MEntry.th32ProcessID.intValue();
                     hProc = kernel32.OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION,
-                    true, dwPid.intValue());
-                    break;
+                    true, iPid);
+                    return true;
                 }
-            } while (Kernel32.INSTANCE.Process32Next(hHandle, MEntry));
+            }
         }
 
-        Kernel32.INSTANCE.CloseHandle(hHandle);
+        finally
+        {
+            Kernel32.INSTANCE.CloseHandle(hHandle);
+        }
+
+        return false;
     }
 
     public static Memory RPM(HANDLE Process, Pointer dwAdress, int bytesToRead)
