@@ -75,7 +75,7 @@ public final class MemManager
 
         if (Kernel32.INSTANCE.Module32FirstW(hHandle, MEntry)) {
             do {
-                System.out.println(MEntry.szModule());
+                System.out.println("\"" + MEntry.szModule() + "\"");
                 if (module.equals(MEntry.szModule())) {
                     match = MEntry;
                     break;
@@ -96,6 +96,7 @@ public final class MemManager
         {
             while (Kernel32.INSTANCE.Process32Next(hHandle, MEntry))
             {
+                System.out.println("\"" + Native.toString(MEntry.szExeFile) + "\"");
                 if (Native.toString(MEntry.szExeFile).endsWith(process))
                 {
                     iPid = MEntry.th32ProcessID.intValue();
