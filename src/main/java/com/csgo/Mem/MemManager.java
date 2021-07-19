@@ -28,23 +28,17 @@ public final class MemManager
 
     private MemManager()
     {
-
         if(!CatchGame(szTarget))
         {
             System.out.println("Couldn't find " + szTarget);
             System.exit(1);
         }
 
-        Tlhelp32.MODULEENTRY32W modClient = CatchModule(iPid, "client.dll");
-
-        if(modClient == null)
+        if(!CatchModule(iPid, "client.dll"))
         {
             System.out.println("Couldn't find client module");
             System.exit(1);
         }
-
-        pClient = modClient.modBaseAddr;
-        dwClientSize = modClient.dwSize;
     }
 
     public Pointer Client()
@@ -62,29 +56,33 @@ public final class MemManager
         return hProc;
     }
 
-    private Tlhelp32.MODULEENTRY32W CatchModule(int pid, String module)
+    private boolean CatchModule(int pid, String module)
     {
         Tlhelp32.MODULEENTRY32W MEntry = new Tlhelp32.MODULEENTRY32W.ByReference();
         HANDLE hHandle = Kernel32.INSTANCE.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPMODULE, new DWORD(pid));
 
         if (hHandle == WinBase.INVALID_HANDLE_VALUE) {
-            return null;
+            System.out.println("Invalid Handle: " + Kernel32.INSTANCE.GetLastError());
+            return false;
         }
 
-        Tlhelp32.MODULEENTRY32W match = null;
-
-        if (Kernel32.INSTANCE.Module32FirstW(hHandle, MEntry)) {
-            do {
-                System.out.println("\"" + MEntry.szModule() + "\"");
-                if (module.equals(MEntry.szModule())) {
-                    match = MEntry;
-                    break;
+        try
+        {
+            while (Kernel32.INSTANCE.Module32NextW(hHandle, MEntry))
+            {
+                if (module.equals(MEntry.szModule()))
+                {
+                    pClient = MEntry.modBaseAddr;
+                    return true;
                 }
-            } while (Kernel32.INSTANCE.Module32NextW(hHandle, MEntry));
+            }
+        }
+        finally
+        {
+            Kernel32.INSTANCE.CloseHandle(hHandle);
         }
 
-        Kernel32.INSTANCE.CloseHandle(hHandle);
-        return match;
+        return true;
     }
 
     private boolean CatchGame(String process)
@@ -94,15 +92,17 @@ public final class MemManager
 
         try
         {
-            while (Kernel32.INSTANCE.Process32Next(hHandle, MEntry))
+            if (Kernel32.INSTANCE.Process32First(hHandle, MEntry))
             {
-                System.out.println("\"" + Native.toString(MEntry.szExeFile) + "\"");
-                if (Native.toString(MEntry.szExeFile).endsWith(process))
+                while (Kernel32.INSTANCE.Process32Next(hHandle, MEntry))
                 {
-                    iPid = MEntry.th32ProcessID.intValue();
-                    hProc = kernel32.OpenProcess(PROCESS_ALL_ACCESS,
-                    true, iPid);
-                    return true;
+                    if (Native.toString(MEntry.szExeFile).equals(process))
+                    {
+                        iPid = MEntry.th32ProcessID.intValue();
+                        hProc = kernel32.OpenProcess(PROCESS_ALL_ACCESS,
+                        false, iPid);
+                        return true;
+                    }
                 }
             }
         }
