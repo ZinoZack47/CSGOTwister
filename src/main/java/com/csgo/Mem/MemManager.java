@@ -17,9 +17,7 @@ public final class MemManager
     private final static Kernel32 kernel32 = Native.load("kernel32", Kernel32.class, W32APIOptions.DEFAULT_OPTIONS);
     //private final static User32 user32 = Native.load("user32", User32.class, W32APIOptions.DEFAULT_OPTIONS);
 
-    private final static int PROCESS_VM_READ= 0x0010;
-    private final static int PROCESS_VM_WRITE = 0x0020;
-    private final static int PROCESS_VM_OPERATION = 0x0008;
+    private final static int PROCESS_ALL_ACCESS = 0x1F1FFB;
 
     private final String szTarget = "csgo.exe";
 
@@ -77,7 +75,8 @@ public final class MemManager
 
         if (Kernel32.INSTANCE.Module32FirstW(hHandle, MEntry)) {
             do {
-                if (module.equals(new String(MEntry.szModule))) {
+                System.out.println(MEntry.szModule());
+                if (module.equals(MEntry.szModule())) {
                     match = MEntry;
                     break;
                 }
@@ -97,11 +96,10 @@ public final class MemManager
         {
             while (Kernel32.INSTANCE.Process32Next(hHandle, MEntry))
             {
-                System.out.println(new String(MEntry.szExeFile));
-                if (process.equals(new String(MEntry.szExeFile)))
+                if (Native.toString(MEntry.szExeFile).endsWith(process))
                 {
                     iPid = MEntry.th32ProcessID.intValue();
-                    hProc = kernel32.OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION,
+                    hProc = kernel32.OpenProcess(PROCESS_ALL_ACCESS,
                     true, iPid);
                     return true;
                 }
