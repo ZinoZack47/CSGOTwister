@@ -19,9 +19,19 @@ public class Radar extends Offsets
         new Pointer(Pointer.nativeValue(MemManager.Get().Client()) + dwLocalPlayer),
         DWORD.SIZE);
 
+        if(MemManager.bDebugMode)
+        {
+            System.out.println("LocalPlayer at: " + pLocalPlayer.toString());
+        }
+
         int iTeam = MemManager.RPM(MemManager.Get().Proc(),
         new Pointer(Pointer.nativeValue(pLocalPlayer) + m_iTeamNum),
         Integer.BYTES).getInt(0);
+
+        if(MemManager.bDebugMode)
+        {
+            System.out.println("LocalPlayer Team: " + iTeam);
+        }
 
         for(int i = 1; i <= 32; i++)
         {
@@ -47,6 +57,14 @@ public class Radar extends Offsets
             int bPlayerSpotted = MemManager.RPM(MemManager.Get().Proc(),
             new Pointer(Pointer.nativeValue(pPlayer) + m_bSpotted),
             1).getInt(0);
+
+            if(MemManager.bDebugMode)
+            {
+                System.out.println("Player Team: " + iPlayerTeam);
+                System.out.println("Player Health: " + iPlayerHealth);
+                System.out.println("Player Spotted: " + bPlayerSpotted);
+                System.out.println();
+            }
 
             if(iPlayerTeam == 1 || iPlayerTeam == iTeam
             || iPlayerHealth <= 0 || bPlayerSpotted == 1)

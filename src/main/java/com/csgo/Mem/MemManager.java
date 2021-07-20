@@ -20,7 +20,7 @@ public final class MemManager
     private final static int PROCESS_ALL_ACCESS = 0x1F1FFB;
 
     private final String szTarget = "csgo.exe";
-    private final boolean bDebugMode = true;
+    public static final boolean bDebugMode = true;
 
     private HANDLE hProc = null;
     private Pointer pClient = null;
