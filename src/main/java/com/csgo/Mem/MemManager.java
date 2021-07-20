@@ -127,24 +127,16 @@ public final class MemManager
         return false;
     }
 
-    public static Memory RPM(HANDLE Process, Pointer dwAdress, int bytesToRead)
+    public static Memory RPM(HANDLE Process, Pointer dwAddress, int bytesToRead)
     {
         IntByReference read = new IntByReference(0);
         Memory mOutput = new Memory(bytesToRead);
-        kernel32.ReadProcessMemory(Process, dwAdress, mOutput, bytesToRead, read);
+        kernel32.ReadProcessMemory(Process, dwAddress, mOutput, bytesToRead, read);
         return mOutput;
     }
 
-    public static boolean WPM(HANDLE Process, Pointer dwAddress, byte[] data)
+    public static boolean WPM(HANDLE Process, Pointer dwAddress, Memory toWrite, int size)
     {
-        int size = data.length;
-        Memory toWrite = new Memory(size);
-
-        for(int i = 0; i < size; i++)
-        {
-            toWrite.setByte(i, data[i]);
-        }
-
         return kernel32.WriteProcessMemory(Process, dwAddress, toWrite, size, null);
     }
 
