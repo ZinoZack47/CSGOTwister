@@ -20,10 +20,11 @@ public final class MemManager
     private final static int PROCESS_ALL_ACCESS = 0x1F1FFB;
 
     private final String szTarget = "csgo.exe";
+    private final boolean bDebugMode = true;
 
     private HANDLE hProc = null;
     private Pointer pClient = null;
-    private DWORD dwClientSize = null;
+    private Pointer pEngine = null;
     private int iPid = -1;
 
     private MemManager()
@@ -34,10 +35,22 @@ public final class MemManager
             System.exit(1);
         }
 
-        if(!CatchModule(iPid, "client.dll"))
+        if((pClient = CatchModule(iPid, "client.dll")) == null)
         {
             System.out.println("Couldn't find client module");
             System.exit(1);
+        }
+
+        if((pEngine = CatchModule(iPid, "engine.dll")) == null)
+        {
+            System.out.println("Couldn't find engine module");
+            System.exit(1);
+        }
+
+        if(bDebugMode)
+        {
+            System.out.println("Client at: " + pClient.toString());
+            System.out.println("Engine at: " + pEngine.toString());
         }
     }
 
@@ -46,9 +59,9 @@ public final class MemManager
         return pClient;
     }
 
-    public long ClientSize()
+    public Pointer Engine()
     {
-        return dwClientSize.longValue();
+        return pEngine;
     }
 
     public HANDLE Proc()
@@ -56,14 +69,14 @@ public final class MemManager
         return hProc;
     }
 
-    private boolean CatchModule(int pid, String module)
+    private Pointer CatchModule(int pid, String module)
     {
         Tlhelp32.MODULEENTRY32W MEntry = new Tlhelp32.MODULEENTRY32W.ByReference();
         HANDLE hHandle = Kernel32.INSTANCE.CreateToolhelp32Snapshot(Tlhelp32.TH32CS_SNAPMODULE, new DWORD(pid));
 
         if (hHandle == WinBase.INVALID_HANDLE_VALUE) {
             System.out.println("Invalid Handle: " + Kernel32.INSTANCE.GetLastError());
-            return false;
+            return null;
         }
 
         try
@@ -72,8 +85,7 @@ public final class MemManager
             {
                 if (module.equals(MEntry.szModule()))
                 {
-                    pClient = MEntry.modBaseAddr;
-                    return true;
+                    return MEntry.modBaseAddr;
                 }
             }
         }
@@ -82,7 +94,7 @@ public final class MemManager
             Kernel32.INSTANCE.CloseHandle(hHandle);
         }
 
-        return true;
+        return null;
     }
 
     private boolean CatchGame(String process)
