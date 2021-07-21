@@ -39,9 +39,9 @@ public class Radar extends Offsets
             new Pointer(Pointer.nativeValue(MemManager.Get().Client()) + dwEntityList + (i - 1) * 0x10),
             DWORD.SIZE);
 
-            int bDormant = MemManager.RPM(MemManager.Get().Proc(),
+            byte bDormant = MemManager.RPM(MemManager.Get().Proc(),
             new Pointer(Pointer.nativeValue(pPlayer) + m_bDormant),
-            1).getInt(0);
+            1).getByte(0);
 
             if(bDormant == 1)
                 continue;
@@ -54,9 +54,9 @@ public class Radar extends Offsets
             new Pointer(Pointer.nativeValue(pPlayer) + m_iHealth),
             Integer.BYTES).getInt(0);
 
-            int bPlayerSpotted = MemManager.RPM(MemManager.Get().Proc(),
+            byte bPlayerSpotted = MemManager.RPM(MemManager.Get().Proc(),
             new Pointer(Pointer.nativeValue(pPlayer) + m_bSpotted),
-            1).getInt(0);
+            1).getByte(0);
 
             if(MemManager.bDebugMode)
             {
@@ -71,7 +71,7 @@ public class Radar extends Offsets
                 continue;
 
             Memory pNewSpotted = new Memory(Pointer.nativeValue(pPlayer) + m_bSpotted);
-            pNewSpotted.setInt(0, 1);
+            pNewSpotted.setByte(0, (byte)1);
 
             MemManager.WPM(MemManager.Get().Proc(),
             new Pointer(Pointer.nativeValue(pPlayer) + m_bSpotted),
