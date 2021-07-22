@@ -111,6 +111,10 @@ public final class MemManager
                     if (Native.toString(MEntry.szExeFile).equals(process))
                     {
                         iPid = MEntry.th32ProcessID.intValue();
+
+                        if((pClient = CatchModule(iPid, "client.dll")) == null)
+                            continue;
+
                         hProc = kernel32.OpenProcess(PROCESS_ALL_ACCESS,
                         false, iPid);
                         return true;
