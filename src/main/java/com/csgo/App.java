@@ -12,7 +12,11 @@ public final class App
     {
         for(;;)
         {
-            Radar.Execute();
+            if(Radar.bToggle)
+            {
+                Radar.Execute();
+            }
+
             Thread.sleep(200);
         }
     }

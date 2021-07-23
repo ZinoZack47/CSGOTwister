@@ -5,9 +5,10 @@ import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.Tlhelp32;
-//import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.platform.win32.WinDef.DWORD;
+import com.sun.jna.platform.win32.Win32VK;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.W32APIOptions;
 import com.sun.jna.platform.win32.WinBase;
@@ -167,6 +168,11 @@ public final class MemManager
         Memory mOutput = new Memory(Byte.BYTES);
         mOutput.setByte(0, (byte)(bValue ? 1 : 0));
         kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Byte.BYTES, null);
+    }
+
+    public boolean isKeyPressed(Win32VK VK_KEY)
+    {
+        return (User32.INSTANCE.GetAsyncKeyState(VK_KEY.code) & 0x8000) != 0;
     }
 
     public static MemManager Get() {

@@ -1,6 +1,7 @@
 package com.csgo.Features;
 
 import com.csgo.Mem.*;
+import com.sun.jna.platform.win32.Win32VK;
 
 /**
  * Radar
@@ -9,8 +10,18 @@ public class Radar extends Offsets
 {
     private Radar() {}
 
+    public static boolean bToggle = true;
+
     public static void Execute()
     {
+        if(MemManager.Get().isKeyPressed(Win32VK.VK_F5))
+        {
+            bToggle = !bToggle;
+        }
+
+        if(!bToggle)
+            return;
+
         long pLocalPlayer = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwLocalPlayer);
 
         int iTeam = MemManager.Get().ReadInt(pLocalPlayer + m_iTeamNum);
