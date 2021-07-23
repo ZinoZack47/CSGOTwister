@@ -157,7 +157,7 @@ public final class MemManager
         IntByReference rRead = new IntByReference(0);
         Memory mOutput = new Memory(DWORD.SIZE);
         kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, DWORD.SIZE, rRead);
-        return mOutput.getLong(0);
+        return Pointer.nativeValue(mOutput.getPointer(0));
     }
 
     public static void WriteInt(HANDLE hProcess, long dwAddress, int iValue)
