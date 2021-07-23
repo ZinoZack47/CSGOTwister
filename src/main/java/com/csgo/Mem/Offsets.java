@@ -13,7 +13,9 @@ public abstract class Offsets {
     protected final static long m_flFlashMaxAlpha = 0xA41C;
     protected final static long m_hActiveWeapon = 0x2EF8;
     protected final static long m_iItemDefinitionIndex = 0x2FAA;
+    protected final static long m_fFlags = 0x104;
     protected final static long m_MoveType = 0x25C;
+    protected final static long m_pStudioHdr = 0x294C;
     protected final static long m_dwBoneMatrix = 0x26A8;
     protected final static long m_vecOrigin = 0x138;
     protected final static long m_vecViewOffset = 0x108;

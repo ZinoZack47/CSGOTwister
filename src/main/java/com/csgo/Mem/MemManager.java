@@ -13,6 +13,8 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.W32APIOptions;
 import com.sun.jna.platform.win32.WinBase;
 
+import com.csgo.Utils.*;
+
 public final class MemManager
 {
     private final Kernel32 kernel32 = Native.load("kernel32", Kernel32.class, W32APIOptions.DEFAULT_OPTIONS);
@@ -155,6 +157,14 @@ public final class MemManager
         Memory mOutput = new Memory(Short.BYTES);
         kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, Short.BYTES, rRead);
         return mOutput.getShort(0);
+    }
+
+    public Vector ReadVector(long dwAddress)
+    {
+        IntByReference rRead = new IntByReference(0);
+        Memory mOutput = new Memory(Float.BYTES * 3);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, Float.BYTES * 3, rRead);
+        return new Vector(mOutput.getFloat(0), mOutput.getFloat(Float.BYTES), mOutput.getFloat(Float.BYTES * 2));
     }
 
     public void WriteFloat(long dwAddress, float flValue)

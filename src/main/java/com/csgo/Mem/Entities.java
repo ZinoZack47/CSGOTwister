@@ -1,5 +1,7 @@
 package com.csgo.Mem;
 
+import com.csgo.Utils.Vector;
+
 public class Entities extends Offsets
 {
     private Entities() { }
@@ -64,6 +66,19 @@ public class Entities extends Offsets
         long dwWeapEnt = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (dwWeapAddress - 0x01) * 0x10);
         short iWeapId = MemManager.Get().ReadShort(dwWeapEnt + m_iItemDefinitionIndex);
         return iWeapId;
+    }
+
+    public Vector Origin(long pEnt)
+    {
+        Vector vecOrigin = MemManager.Get().ReadVector(pEnt + m_vecOrigin);
+        return vecOrigin;
+    }
+
+    public Vector EyePos(long pEnt)
+    {
+        Vector vecOrigin = Origin(pEnt);
+        Vector vecViewOffset = MemManager.Get().ReadVector(pEnt + m_vecViewOffset);
+        return Vector.Add(vecOrigin, vecViewOffset);
     }
 
     public boolean Spotted(long pEnt)
