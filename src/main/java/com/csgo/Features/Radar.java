@@ -1,9 +1,5 @@
 package com.csgo.Features;
 
-import com.sun.jna.Pointer;
-import com.sun.jna.Memory;
-import com.sun.jna.platform.win32.WinDef.DWORD;
-
 import com.csgo.Mem.*;
 
 /**
@@ -13,20 +9,19 @@ public class Radar extends Offsets
 {
     private Radar() {}
 
+
     public static void Execute()
     {
-        Pointer pLocalPlayer = MemManager.RPM(MemManager.Get().Proc(),
-        new Pointer(Pointer.nativeValue(MemManager.Get().Client()) + dwLocalPlayer),
-        DWORD.SIZE);
+        long pLocalPlayer = MemManager.ReadDWORD(MemManager.Get().Proc(),
+        MemManager.Get().Client() + dwLocalPlayer);
 
         if(MemManager.bDebugMode)
         {
-            System.out.println("LocalPlayer at: " + pLocalPlayer.toString());
+            System.out.printf("LocalPlayer at: 0x%06x\n", pLocalPlayer);
         }
 
-        int iTeam = MemManager.RPM(MemManager.Get().Proc(),
-        new Pointer(Pointer.nativeValue(pLocalPlayer) + m_iTeamNum),
-        Integer.BYTES).getInt(0);
+        int iTeam = MemManager.ReadInt(MemManager.Get().Proc(),
+        pLocalPlayer + m_iTeamNum);
 
         if(MemManager.bDebugMode)
         {
@@ -35,28 +30,23 @@ public class Radar extends Offsets
 
         for(int i = 1; i <= 32; i++)
         {
-            Pointer pPlayer = MemManager.RPM(MemManager.Get().Proc(),
-            new Pointer(Pointer.nativeValue(MemManager.Get().Client()) + dwEntityList + (i - 1) * 0x10),
-            DWORD.SIZE);
+            long pPlayer = MemManager.ReadDWORD(MemManager.Get().Proc(),
+            MemManager.Get().Client() + dwEntityList + (i - 1) * 0x10);
 
-            byte bDormant = MemManager.RPM(MemManager.Get().Proc(),
-            new Pointer(Pointer.nativeValue(pPlayer) + m_bDormant),
-            1).getByte(0);
+            boolean bDormant = MemManager.ReadBool(MemManager.Get().Proc(),
+            pPlayer + m_bDormant);
 
-            if(bDormant == 1)
+            if(bDormant)
                 continue;
 
-            int iPlayerTeam = MemManager.RPM(MemManager.Get().Proc(),
-            new Pointer(Pointer.nativeValue(pPlayer) + m_iTeamNum),
-            Integer.BYTES).getInt(0);
+            int iPlayerTeam = MemManager.ReadInt(MemManager.Get().Proc(),
+            pPlayer + m_iTeamNum);
 
-            int iPlayerHealth = MemManager.RPM(MemManager.Get().Proc(),
-            new Pointer(Pointer.nativeValue(pPlayer) + m_iHealth),
-            Integer.BYTES).getInt(0);
+            int iPlayerHealth = MemManager.ReadInt(MemManager.Get().Proc(),
+            pPlayer + m_iHealth);
 
-            byte bPlayerSpotted = MemManager.RPM(MemManager.Get().Proc(),
-            new Pointer(Pointer.nativeValue(pPlayer) + m_bSpotted),
-            1).getByte(0);
+            boolean bPlayerSpotted = MemManager.ReadBool(MemManager.Get().Proc(),
+            pPlayer + m_bSpotted);
 
             if(MemManager.bDebugMode)
             {
@@ -67,16 +57,12 @@ public class Radar extends Offsets
             }
 
             if(iPlayerTeam == 1 || iPlayerTeam == iTeam
-            || iPlayerHealth <= 0 || bPlayerSpotted == 1)
+            || iPlayerHealth <= 0 || bPlayerSpotted)
                 continue;
 
-            Memory pNewSpotted = new Memory(Pointer.nativeValue(pPlayer) + m_bSpotted);
-            pNewSpotted.setByte(0, (byte)1);
-
-            MemManager.WPM(MemManager.Get().Proc(),
-            new Pointer(Pointer.nativeValue(pPlayer) + m_bSpotted),
-            pNewSpotted,
-            1);
+            MemManager.WriteBool(MemManager.Get().Proc(),
+            pPlayer + m_bSpotted,
+            true);
         }
     }
 

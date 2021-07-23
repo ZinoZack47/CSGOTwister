@@ -54,14 +54,14 @@ public final class MemManager
         }
     }
 
-    public Pointer Client()
+    public long Client()
     {
-        return pClient;
+        return Pointer.nativeValue(pClient);
     }
 
-    public Pointer Engine()
+    public long Engine()
     {
-        return pEngine;
+        return Pointer.nativeValue(pEngine);
     }
 
     public HANDLE Proc()
@@ -112,9 +112,6 @@ public final class MemManager
                     {
                         iPid = MEntry.th32ProcessID.intValue();
 
-                        if((pClient = CatchModule(iPid, "client.dll")) == null)
-                            continue;
-
                         hProc = kernel32.OpenProcess(PROCESS_ALL_ACCESS,
                         false, iPid);
                         return true;
@@ -131,17 +128,57 @@ public final class MemManager
         return false;
     }
 
-    public static Memory RPM(HANDLE Process, Pointer dwAddress, int bytesToRead)
+    public static int ReadInt(HANDLE hProcess, long dwAddress)
     {
-        IntByReference read = new IntByReference(0);
-        Memory mOutput = new Memory(bytesToRead);
-        kernel32.ReadProcessMemory(Process, dwAddress, mOutput, bytesToRead, read);
-        return mOutput;
+        IntByReference rRead = new IntByReference(0);
+        Memory mOutput = new Memory(Integer.BYTES);
+        kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Integer.BYTES, rRead);
+        return mOutput.getInt(0);
     }
 
-    public static boolean WPM(HANDLE Process, Pointer dwAddress, Memory toWrite, int size)
+    public static float ReadFloat(HANDLE hProcess, long dwAddress)
     {
-        return kernel32.WriteProcessMemory(Process, dwAddress, toWrite, size, null);
+        IntByReference rRead = new IntByReference(0);
+        Memory mOutput = new Memory(Float.BYTES);
+        kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Float.BYTES, rRead);
+        return mOutput.getFloat(0);
+    }
+
+    public static boolean ReadBool(HANDLE hProcess, long dwAddress)
+    {
+        IntByReference rRead = new IntByReference(0);
+        Memory mOutput = new Memory(Byte.BYTES);
+        kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Byte.BYTES, rRead);
+        return mOutput.getByte(0) == 1;
+    }
+
+    public static long ReadDWORD(HANDLE hProcess, long dwAddress)
+    {
+        IntByReference rRead = new IntByReference(0);
+        Memory mOutput = new Memory(DWORD.SIZE);
+        kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, DWORD.SIZE, rRead);
+        return mOutput.getLong(0);
+    }
+
+    public static void WriteInt(HANDLE hProcess, long dwAddress, int iValue)
+    {
+        Memory mOutput = new Memory(Integer.BYTES);
+        mOutput.setInt(0, iValue);
+        kernel32.WriteProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Integer.BYTES, null);
+    }
+
+    public static void WriteFloat(HANDLE hProcess, long dwAddress, float flValue)
+    {
+        Memory mOutput = new Memory(Float.BYTES);
+        mOutput.setFloat(0, flValue);
+        kernel32.WriteProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Float.BYTES, null);
+    }
+
+    public static void WriteBool(HANDLE hProcess, long dwAddress, boolean bValue)
+    {
+        Memory mOutput = new Memory(Byte.BYTES);
+        mOutput.setByte(0, (byte)(bValue ? 1 : 0));
+        kernel32.WriteProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Byte.BYTES, null);
     }
 
     public static MemManager Get() {
