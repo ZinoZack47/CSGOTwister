@@ -1,12 +1,14 @@
 package com.csgo.Features;
 
-import com.csgo.Mem.*;
+import com.csgo.Mem.Entities;
+import com.csgo.Mem.MemManager;
+
 import com.sun.jna.platform.win32.Win32VK;
 
 /**
  * Radar
  */
-public class Radar extends Offsets
+public class Radar
 {
     private Radar() {}
 
@@ -22,30 +24,30 @@ public class Radar extends Offsets
         if(!bToggle)
             return;
 
-        long pLocalPlayer = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwLocalPlayer);
+        long pLocalPlayer = Entities.Get().LocalPlayer();
 
-        int iTeam = MemManager.Get().ReadInt(pLocalPlayer + m_iTeamNum);
+        int iTeam = Entities.Get().Team(pLocalPlayer);
 
-        for(int i = 1; i <= 32; i++)
+        for(int id = 1; id <= 32; id++)
         {
-            long pPlayer = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (i - 1) * 0x10);
+            long pPlayer = Entities.Get().EntityFromId(id);
 
-            boolean bDormant = MemManager.Get().ReadBool(pPlayer + m_bDormant);
+            boolean bDormant = Entities.Get().Dormant(pPlayer);
 
             if(bDormant)
                 continue;
 
-            int iPlayerTeam = MemManager.Get().ReadInt(pPlayer + m_iTeamNum);
+            int iPlayerTeam = Entities.Get().Team(pPlayer);
 
-            int iPlayerHealth = MemManager.Get().ReadInt(pPlayer + m_iHealth);
+            int iPlayerHealth = Entities.Get().Health(pPlayer);
 
-            boolean bPlayerSpotted = MemManager.Get().ReadBool(pPlayer + m_bSpotted);
+            boolean bPlayerSpotted = Entities.Get().Spotted(pPlayer);
 
             if(iPlayerTeam == 1 || iPlayerTeam == iTeam
             || iPlayerHealth <= 0 || bPlayerSpotted)
                 continue;
 
-            MemManager.Get().WriteBool(pPlayer + m_bSpotted, true);
+            Entities.Get().Spotted(pPlayer, true);
         }
     }
 

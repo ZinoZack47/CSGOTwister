@@ -149,11 +149,12 @@ public final class MemManager
         return Pointer.nativeValue(mOutput.getPointer(0));
     }
 
-    public void WriteInt(long dwAddress, int iValue)
+    public short ReadShort(long dwAddress)
     {
-        Memory mOutput = new Memory(Integer.BYTES);
-        mOutput.setInt(0, iValue);
-        kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Integer.BYTES, null);
+        IntByReference rRead = new IntByReference(0);
+        Memory mOutput = new Memory(Short.BYTES);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, Short.BYTES, rRead);
+        return mOutput.getShort(0);
     }
 
     public void WriteFloat(long dwAddress, float flValue)

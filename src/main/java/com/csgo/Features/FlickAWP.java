@@ -7,7 +7,8 @@ import com.csgo.Mem.Offsets;
  */
 public class FlickAWP extends Offsets {
 
-    public static void Execute() {
+    public static void Execute()
+    {
 
     }
 }
