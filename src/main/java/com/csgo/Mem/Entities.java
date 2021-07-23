@@ -1,6 +1,7 @@
 package com.csgo.Mem;
 
-import com.csgo.Utils.Vector;
+import com.csgo.Utils.*;
+import com.csgo.Utils.Enums.*;
 
 public class Entities extends Offsets
 {
@@ -60,12 +61,12 @@ public class Entities extends Offsets
         MemManager.Get().WriteFloat(pEnt + m_flFlashMaxAlpha, flAlpha);
     }
 
-    public short CurrentWeaponId(Long pEnt)
+    public EItemDefinitionIndex CurrentWeaponId(Long pEnt)
     {
         long dwWeapAddress = MemManager.Get().ReadDWORD(pEnt + m_hActiveWeapon) & 0xFFF;
         long dwWeapEnt = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (dwWeapAddress - 0x01) * 0x10);
         short iWeapId = MemManager.Get().ReadShort(dwWeapEnt + m_iItemDefinitionIndex);
-        return iWeapId;
+        return EItemDefinitionIndex.valueOf(iWeapId);
     }
 
     public Vector Origin(long pEnt)

@@ -288,5 +288,8 @@ public enum EClassIndex
 	SporeExplosion,
 	SporeTrail;
 
-    public final int value = -1 + ordinal();
+    public int Index()
+    {
+        return -1 + ordinal();
+    }
 }

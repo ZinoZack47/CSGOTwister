@@ -12,5 +12,8 @@ public enum EWeaponType
 	WEAPONTYPE_HEAVYPISTOL,
 	WEAPONTYPE_AUTONOOB;
 
-    public int value = ordinal();
+    public int Index()
+    {
+        return ordinal();
+    }
 };

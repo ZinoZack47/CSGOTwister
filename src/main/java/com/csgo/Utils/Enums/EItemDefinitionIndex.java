@@ -1,96 +1,126 @@
 package com.csgo.Utils.Enums;
 
+
+import java.util.Map;
+import java.util.HashMap;
+
 public enum EItemDefinitionIndex
-{;
-    public final short WEAPON_NONE = 0;
-	public final short WEAPON_DEAGLE = 1;
-	public final short WEAPON_ELITE = 2;
-	public final short WEAPON_FIVESEVEN = 3;
-	public final short WEAPON_GLOCK = 4;
-	public final short WEAPON_AK47 = 7;
-	public final short WEAPON_AUG = 8;
-	public final short WEAPON_AWP = 9;
-	public final short WEAPON_FAMAS = 10;
-	public final short WEAPON_G3SG1 = 11;
-	public final short WEAPON_GALILAR = 13;
-	public final short WEAPON_M249 = 14;
-	public final short WEAPON_M4A1 = 16;
-	public final short WEAPON_MAC10 = 17;
-	public final short WEAPON_P90 = 19;
-	public final short WEAPON_ZONE_REPULSOR = 20;
-	public final short WEAPON_MP5SD = 23;
-	public final short WEAPON_UMP45 = 24;
-	public final short WEAPON_XM1014 = 25;
-	public final short WEAPON_BIZON = 26;
-	public final short WEAPON_MAG7 = 27;
-	public final short WEAPON_NEGEV = 28;
-	public final short WEAPON_SAWEDOFF = 29;
-	public final short WEAPON_TEC9 = 30;
-	public final short WEAPON_TASER = 31;
-	public final short WEAPON_HKP2000 = 32;
-	public final short WEAPON_MP7 = 33;
-	public final short WEAPON_MP9 = 34;
-	public final short WEAPON_NOVA = 35;
-	public final short WEAPON_P250 = 36;
-	public final short WEAPON_SHIELD = 37;
-	public final short WEAPON_SCAR20 = 38;
-	public final short WEAPON_SG556 = 39;
-	public final short WEAPON_SSG08 = 40;
-	public final short WEAPON_KNIFE_GG = 41;
-	public final short WEAPON_KNIFE = 42;
-	public final short WEAPON_FLASHBANG = 43;
-	public final short WEAPON_HEGRENADE = 44;
-	public final short WEAPON_SMOKEGRENADE = 45;
-	public final short WEAPON_MOLOTOV = 46;
-	public final short WEAPON_DECOY = 47;
-	public final short WEAPON_INCGRENADE = 48;
-	public final short WEAPON_C4 = 49;
-	public final short WEAPON_HEALTHSHOT = 57;
-	public final short WEAPON_KNIFE_T = 59;
-	public final short WEAPON_M4A1_SILENCER = 60;
-	public final short WEAPON_USP_SILENCER = 61;
-	public final short WEAPON_CZ75A = 63;
-	public final short WEAPON_REVOLVER = 64;
-	public final short WEAPON_TAGRENADE = 68;
-	public final short WEAPON_FISTS = 69;
-	public final short WEAPON_BREACHCHARGE = 70;
-	public final short WEAPON_TABLET = 72;
-	public final short WEAPON_MELEE = 74;
-	public final short WEAPON_AXE = 75;
-	public final short WEAPON_HAMMER = 76;
-	public final short WEAPON_SPANNER = 78;
-	public final short WEAPON_KNIFE_GHOST = 80;
-	public final short WEAPON_FIREBOMB = 81;
-	public final short WEAPON_DIVERSION = 82;
-	public final short WEAPON_FRAG_GRENADE = 83;
-	public final short WEAPON_SNOWBALL = 84;
-	public final short WEAPON_BUMPMINE = 85;
-	public final short WEAPON_KNIFE_BAYONET = 500;
-	public final short WEAPON_KNIFE_CSS = 503;
-	public final short WEAPON_KNIFE_FLIP = 505;
-	public final short WEAPON_KNIFE_GUT = 506;
-	public final short WEAPON_KNIFE_KARAMBIT = 507;
-	public final short WEAPON_KNIFE_M9_BAYONET = 508;
-	public final short WEAPON_KNIFE_TACTICAL = 509;
-	public final short WEAPON_KNIFE_FALCHION = 512;
-	public final short WEAPON_KNIFE_SURVIVAL_BOWIE = 514;
-	public final short WEAPON_KNIFE_BUTTERFLY = 515;
-	public final short WEAPON_KNIFE_PUSH = 516;
-	public final short WEAPON_KNIFE_CORD = 517;
-	public final short WEAPON_KNIFE_CANIS = 518;
-	public final short WEAPON_KNIFE_URSUS = 519;
-	public final short WEAPON_KNIFE_GYPSY_JACKKNIFE = 520;
-	public final short WEAPON_KNIFE_OUTDOOR = 521;
-	public final short WEAPON_KNIFE_STILETTO = 522;
-	public final short WEAPON_KNIFE_WIDOWMAKER = 523;
-	public final short WEAPON_KNIFE_SKELETON = 525;
-	public final short GLOVE_STUDDED_BLOODHOUND = 5027;
-	public final short GLOVE_T = 5028;
-	public final short GLOVE_CT = 5029;
-	public final short GLOVE_SPORTY = 5030;
-	public final short GLOVE_SLICK = 5031;
-	public final short GLOVE_LEATHER_HANDWRAPS = 5032;
-	public final short GLOVE_MOTORCYCLE = 5033;
-	public final short GLOVE_SPECIALIST = 5034;
-	public final short GLOVE_HYDRA = 5035;
+{
+    WEAPON_NONE(0),
+    WEAPON_DEAGLE(1),
+    WEAPON_ELITE(2),
+    WEAPON_FIVESEVEN(3),
+    WEAPON_GLOCK(4),
+    WEAPON_AK47(7),
+    WEAPON_AUG(8),
+    WEAPON_AWP(9),
+    WEAPON_FAMAS(10),
+    WEAPON_G3SG1(11),
+    WEAPON_GALILAR(13),
+    WEAPON_M249(14),
+    WEAPON_M4A1(16),
+    WEAPON_MAC10(17),
+    WEAPON_P90(19),
+    WEAPON_ZONE_REPULSOR(20),
+    WEAPON_MP5SD(23),
+    WEAPON_UMP45(24),
+    WEAPON_XM1014(25),
+    WEAPON_BIZON(26),
+    WEAPON_MAG7(27),
+    WEAPON_NEGEV(28),
+    WEAPON_SAWEDOFF(29),
+    WEAPON_TEC9(30),
+    WEAPON_TASER(31),
+    WEAPON_HKP2000(32),
+    WEAPON_MP7(33),
+    WEAPON_MP9(34),
+    WEAPON_NOVA(35),
+    WEAPON_P250(36),
+    WEAPON_SHIELD(37),
+    WEAPON_SCAR20(38),
+    WEAPON_SG556(39),
+    WEAPON_SSG08(40),
+    WEAPON_KNIFE_GG(41),
+    WEAPON_KNIFE(42),
+    WEAPON_FLASHBANG(43),
+    WEAPON_HEGRENADE(44),
+    WEAPON_SMOKEGRENADE(45),
+    WEAPON_MOLOTOV(46),
+    WEAPON_DECOY(47),
+    WEAPON_INCGRENADE(48),
+    WEAPON_C4(49),
+    WEAPON_HEALTHSHOT(57),
+    WEAPON_KNIFE_T(59),
+    WEAPON_M4A1_SILENCER(60),
+    WEAPON_USP_SILENCER(61),
+    WEAPON_CZ75A(63),
+    WEAPON_REVOLVER(64),
+    WEAPON_TAGRENADE(68),
+    WEAPON_FISTS(69),
+    WEAPON_BREACHCHARGE(70),
+    WEAPON_TABLET(72),
+    WEAPON_MELEE(74),
+    WEAPON_AXE(75),
+    WEAPON_HAMMER(76),
+    WEAPON_SPANNER(78),
+    WEAPON_KNIFE_GHOST(80),
+    WEAPON_FIREBOMB(81),
+    WEAPON_DIVERSION(82),
+    WEAPON_FRAG_GRENADE(83),
+    WEAPON_SNOWBALL(84),
+    WEAPON_BUMPMINE(85),
+    WEAPON_KNIFE_BAYONET(500),
+    WEAPON_KNIFE_CSS(503),
+    WEAPON_KNIFE_FLIP(505),
+    WEAPON_KNIFE_GUT(506),
+    WEAPON_KNIFE_KARAMBIT(507),
+    WEAPON_KNIFE_M9_BAYONET(508),
+    WEAPON_KNIFE_TACTICAL(509),
+    WEAPON_KNIFE_FALCHION(512),
+    WEAPON_KNIFE_SURVIVAL_BOWIE(514),
+    WEAPON_KNIFE_BUTTERFLY(515),
+    WEAPON_KNIFE_PUSH(516),
+    WEAPON_KNIFE_CORD(517),
+    WEAPON_KNIFE_CANIS(518),
+    WEAPON_KNIFE_URSUS(519),
+    WEAPON_KNIFE_GYPSY_JACKKNIFE(520),
+    WEAPON_KNIFE_OUTDOOR(521),
+    WEAPON_KNIFE_STILETTO(522),
+    WEAPON_KNIFE_WIDOWMAKER(523),
+    WEAPON_KNIFE_SKELETON(525),
+    GLOVE_STUDDED_BLOODHOUND(5027),
+    GLOVE_T(5028),
+    GLOVE_CT(5029),
+    GLOVE_SPORTY(5030),
+    GLOVE_SLICK(5031),
+    GLOVE_LEATHER_HANDWRAPS(5032),
+    GLOVE_MOTORCYCLE(5033),
+    GLOVE_SPECIALIST(5034),
+    GLOVE_HYDRA(5035);
+
+    EItemDefinitionIndex(int id)
+    {
+        _id = (short)id;
+    }
+
+    public short Index()
+    {
+        return _id;
+    }
+
+    private static Map<Short, EItemDefinitionIndex> map = new HashMap<Short, EItemDefinitionIndex>();
+
+    static
+    {
+        for (EItemDefinitionIndex Index : EItemDefinitionIndex.values()) {
+            map.put(Index._id, Index);
+        }
+    }
+
+    public static EItemDefinitionIndex valueOf(short Index) {
+        return map.get(Index);
+    }
+
+    private final short _id;
+
 }

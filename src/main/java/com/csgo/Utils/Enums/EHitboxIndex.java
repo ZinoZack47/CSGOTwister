@@ -24,5 +24,8 @@ public enum EHitboxIndex
 	HITBOX_LEFT_FOREARM,
 	HITBOX_MAX;
 
-    public final int value = -1 + ordinal();
+    public short Index()
+    {
+        return (short)(-1 + ordinal());
+    }
 };
