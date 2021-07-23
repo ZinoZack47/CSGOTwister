@@ -9,60 +9,32 @@ public class Radar extends Offsets
 {
     private Radar() {}
 
-
     public static void Execute()
     {
-        long pLocalPlayer = MemManager.ReadDWORD(MemManager.Get().Proc(),
-        MemManager.Get().Client() + dwLocalPlayer);
+        long pLocalPlayer = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwLocalPlayer);
 
-        if(MemManager.bDebugMode)
-        {
-            System.out.printf("LocalPlayer at: 0x%06x\n", pLocalPlayer);
-        }
-
-        int iTeam = MemManager.ReadInt(MemManager.Get().Proc(),
-        pLocalPlayer + m_iTeamNum);
-
-        if(MemManager.bDebugMode)
-        {
-            System.out.println("LocalPlayer Team: " + iTeam);
-        }
+        int iTeam = MemManager.Get().ReadInt(pLocalPlayer + m_iTeamNum);
 
         for(int i = 1; i <= 32; i++)
         {
-            long pPlayer = MemManager.ReadDWORD(MemManager.Get().Proc(),
-            MemManager.Get().Client() + dwEntityList + (i - 1) * 0x10);
+            long pPlayer = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (i - 1) * 0x10);
 
-            boolean bDormant = MemManager.ReadBool(MemManager.Get().Proc(),
-            pPlayer + m_bDormant);
+            boolean bDormant = MemManager.Get().ReadBool(pPlayer + m_bDormant);
 
             if(bDormant)
                 continue;
 
-            int iPlayerTeam = MemManager.ReadInt(MemManager.Get().Proc(),
-            pPlayer + m_iTeamNum);
+            int iPlayerTeam = MemManager.Get().ReadInt(pPlayer + m_iTeamNum);
 
-            int iPlayerHealth = MemManager.ReadInt(MemManager.Get().Proc(),
-            pPlayer + m_iHealth);
+            int iPlayerHealth = MemManager.Get().ReadInt(pPlayer + m_iHealth);
 
-            boolean bPlayerSpotted = MemManager.ReadBool(MemManager.Get().Proc(),
-            pPlayer + m_bSpotted);
-
-            if(MemManager.bDebugMode)
-            {
-                System.out.println("Player Team: " + iPlayerTeam);
-                System.out.println("Player Health: " + iPlayerHealth);
-                System.out.println("Player Spotted: " + bPlayerSpotted);
-                System.out.println();
-            }
+            boolean bPlayerSpotted = MemManager.Get().ReadBool(pPlayer + m_bSpotted);
 
             if(iPlayerTeam == 1 || iPlayerTeam == iTeam
             || iPlayerHealth <= 0 || bPlayerSpotted)
                 continue;
 
-            MemManager.WriteBool(MemManager.Get().Proc(),
-            pPlayer + m_bSpotted,
-            true);
+            MemManager.Get().WriteBool(pPlayer + m_bSpotted, true);
         }
     }
 

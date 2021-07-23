@@ -14,13 +14,12 @@ import com.sun.jna.platform.win32.WinBase;
 
 public final class MemManager
 {
-    private final static Kernel32 kernel32 = Native.load("kernel32", Kernel32.class, W32APIOptions.DEFAULT_OPTIONS);
+    private final Kernel32 kernel32 = Native.load("kernel32", Kernel32.class, W32APIOptions.DEFAULT_OPTIONS);
     //private final static User32 user32 = Native.load("user32", User32.class, W32APIOptions.DEFAULT_OPTIONS);
 
-    private final static int PROCESS_ALL_ACCESS = 0x1F1FFB;
+    private final int PROCESS_ALL_ACCESS = 0x1F1FFB;
 
     private final String szTarget = "csgo.exe";
-    public static final boolean bDebugMode = true;
 
     private HANDLE hProc = null;
     private Pointer pClient = null;
@@ -46,12 +45,6 @@ public final class MemManager
             System.out.println("Couldn't find engine module");
             System.exit(1);
         }
-
-        if(bDebugMode)
-        {
-            System.out.println("Client at: " + pClient.toString());
-            System.out.println("Engine at: " + pEngine.toString());
-        }
     }
 
     public long Client()
@@ -62,11 +55,6 @@ public final class MemManager
     public long Engine()
     {
         return Pointer.nativeValue(pEngine);
-    }
-
-    public HANDLE Proc()
-    {
-        return hProc;
     }
 
     private Pointer CatchModule(int pid, String module)
@@ -128,57 +116,57 @@ public final class MemManager
         return false;
     }
 
-    public static int ReadInt(HANDLE hProcess, long dwAddress)
+    public int ReadInt(long dwAddress)
     {
         IntByReference rRead = new IntByReference(0);
         Memory mOutput = new Memory(Integer.BYTES);
-        kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Integer.BYTES, rRead);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, Integer.BYTES, rRead);
         return mOutput.getInt(0);
     }
 
-    public static float ReadFloat(HANDLE hProcess, long dwAddress)
+    public float ReadFloat(long dwAddress)
     {
         IntByReference rRead = new IntByReference(0);
         Memory mOutput = new Memory(Float.BYTES);
-        kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Float.BYTES, rRead);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, Float.BYTES, rRead);
         return mOutput.getFloat(0);
     }
 
-    public static boolean ReadBool(HANDLE hProcess, long dwAddress)
+    public boolean ReadBool(long dwAddress)
     {
         IntByReference rRead = new IntByReference(0);
         Memory mOutput = new Memory(Byte.BYTES);
-        kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Byte.BYTES, rRead);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, Byte.BYTES, rRead);
         return mOutput.getByte(0) == 1;
     }
 
-    public static long ReadDWORD(HANDLE hProcess, long dwAddress)
+    public long ReadDWORD(long dwAddress)
     {
         IntByReference rRead = new IntByReference(0);
         Memory mOutput = new Memory(DWORD.SIZE);
-        kernel32.ReadProcessMemory(hProcess, new Pointer(dwAddress), mOutput, DWORD.SIZE, rRead);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, DWORD.SIZE, rRead);
         return Pointer.nativeValue(mOutput.getPointer(0));
     }
 
-    public static void WriteInt(HANDLE hProcess, long dwAddress, int iValue)
+    public void WriteInt(long dwAddress, int iValue)
     {
         Memory mOutput = new Memory(Integer.BYTES);
         mOutput.setInt(0, iValue);
-        kernel32.WriteProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Integer.BYTES, null);
+        kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Integer.BYTES, null);
     }
 
-    public static void WriteFloat(HANDLE hProcess, long dwAddress, float flValue)
+    public void WriteFloat(long dwAddress, float flValue)
     {
         Memory mOutput = new Memory(Float.BYTES);
         mOutput.setFloat(0, flValue);
-        kernel32.WriteProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Float.BYTES, null);
+        kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Float.BYTES, null);
     }
 
-    public static void WriteBool(HANDLE hProcess, long dwAddress, boolean bValue)
+    public void WriteBool(long dwAddress, boolean bValue)
     {
         Memory mOutput = new Memory(Byte.BYTES);
         mOutput.setByte(0, (byte)(bValue ? 1 : 0));
-        kernel32.WriteProcessMemory(hProcess, new Pointer(dwAddress), mOutput, Byte.BYTES, null);
+        kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Byte.BYTES, null);
     }
 
     public static MemManager Get() {
