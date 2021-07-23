@@ -162,9 +162,39 @@ public final class MemManager
     public Vector ReadVector(long dwAddress)
     {
         IntByReference rRead = new IntByReference(0);
-        Memory mOutput = new Memory(Float.BYTES * 3);
-        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, Float.BYTES * 3, rRead);
-        return new Vector(mOutput.getFloat(0), mOutput.getFloat(Float.BYTES), mOutput.getFloat(Float.BYTES * 2));
+        int iSize = Float.BYTES * 3;
+        Memory mOutput = new Memory(iSize);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
+        return new Vector(mOutput.getFloat(0), mOutput.getFloat(0x4), mOutput.getFloat(0x8));
+    }
+
+    public MStudioBox ReadMStudioBox(long dwAddress)
+    {
+        IntByReference rRead = new IntByReference(0);
+        int iSize = Integer.BYTES * 3 + Float.BYTES * 3 * 3 + Float.BYTES;
+        Memory mOutput = new Memory(iSize);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
+        return new MStudioBox(
+            mOutput.getInt(0),
+            mOutput.getInt(0x4),
+            new Vector(
+                mOutput.getFloat(0x8),
+                mOutput.getFloat(0xC),
+                mOutput.getFloat(0x10)
+            ),
+            new Vector(
+                mOutput.getFloat(0x14),
+                mOutput.getFloat(0x18),
+                mOutput.getFloat(0x1C)
+            ),
+            mOutput.getInt(0x20),
+            new Vector(
+                mOutput.getFloat(0x24),
+                mOutput.getFloat(0x28),
+                mOutput.getFloat(0x2C)
+            ),
+            mOutput.getFloat(0x30)
+        );
     }
 
     public void WriteFloat(long dwAddress, float flValue)
