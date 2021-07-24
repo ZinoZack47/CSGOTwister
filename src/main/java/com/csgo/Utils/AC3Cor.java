@@ -26,6 +26,11 @@ public class AC3Cor //This stands for Abstract Class w/ 3 Coordinates
         this.c3 = ac3Cor.c3;
     }
 
+    public AC3Cor(float[] Array3C)
+    {
+        this.Override(Array3C);
+    }
+
     public void Override(float Array3C[]) // 3C Stands for 3 Coordinates
     {
         if(Array3C.length != 3)

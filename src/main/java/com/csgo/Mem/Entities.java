@@ -73,9 +73,7 @@ public class Entities extends Offsets
         if(iTeam <= 1 || iTeam == Team(LocalPlayer()) && !DangerZone())
             return false;
 
-        int iHealth = Health(pEnt);
-
-        if(iHealth <= 0)
+        if(!Alive(pEnt))
             return false;
 
         if(!bGunGameCheck)
@@ -89,6 +87,11 @@ public class Entities extends Offsets
         return true;
     }
 
+    public boolean Alive(long pEnt)
+    {
+        return Health(pEnt) > 0;
+    }
+
     public boolean Flashed(long pEnt)
     {
         float flFlashDuration = MemManager.Get().ReadFloat(pEnt + m_flFlashDuration);
@@ -100,12 +103,26 @@ public class Entities extends Offsets
         MemManager.Get().WriteFloat(pEnt + m_flFlashMaxAlpha, flAlpha);
     }
 
+    public boolean Reloading(long pEnt)
+    {
+        //Only works for LocalPlayer AFAIK
+        boolean bIsReloading = MemManager.Get().ReadBool(pEnt + m_bInReload);
+        return bIsReloading;
+    }
     public EItemDefinitionIndex CurrentWeaponId(Long pEnt)
     {
         long dwWeapAddress = MemManager.Get().ReadDWORD(pEnt + m_hActiveWeapon) & 0xFFF;
         long dwWeapEnt = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (dwWeapAddress - 0x01) * 0x10);
         short iWeapId = MemManager.Get().ReadShort(dwWeapEnt + m_iItemDefinitionIndex);
         return EItemDefinitionIndex.valueOf(iWeapId);
+    }
+
+    public int CurrentWeaponClip(Long pEnt)
+    {
+        long dwWeapAddress = MemManager.Get().ReadDWORD(pEnt + m_hActiveWeapon) & 0xFFF;
+        long dwWeapEnt = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (dwWeapAddress - 0x01) * 0x10);
+        int iClip = MemManager.Get().ReadInt(dwWeapEnt + m_iClip1);
+        return iClip;
     }
 
     public Vector Origin(long pEnt)
@@ -136,4 +153,16 @@ public class Entities extends Offsets
 
         MemManager.Get().WriteBool(pEnt + m_bSpotted, bNewSpotted);
     }
+
+    public Matrix3x4 BoneMatrix(long pEnt)
+    {
+        long dwBoneMatrix = MemManager.Get().ReadDWORD(pEnt + m_dwBoneMatrix);
+        return new Matrix3x4(MemManager.Get().ReadFloatArray(dwBoneMatrix, Matrix3x4.Length));
+    }
+
+    public Vector GetHitboxPos(long pEnt, EHitboxIndex eBone)
+    {
+        return null;
+    }
+
 }

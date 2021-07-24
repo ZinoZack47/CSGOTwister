@@ -7,6 +7,16 @@ public class Vector extends AC3Cor
         super(flX, flY, flZ);
     }
 
+    public Vector()
+    {
+        super();
+    }
+
+    public Vector(float[] arrVector)
+    {
+        super(arrVector);
+    }
+
     public static Vector Add(Vector vec1, Vector vec2)
     {
         return new Vector(
@@ -16,6 +26,11 @@ public class Vector extends AC3Cor
         );
     }
 
+    public float Dot(Vector vecOther)
+    {
+        return this.X() * vecOther.X() + this.Y() * vecOther.Y() + this.Z() * vecOther.Z();
+    }
+
     public float Distance(Vector vecDestination)
     {
         return (float)Math.sqrt(
@@ -23,6 +38,16 @@ public class Vector extends AC3Cor
             Math.pow(this.Y() - vecDestination.Y(), 2) +
             Math.pow(this.Z() - vecDestination.Z(), 2)
         );
+    }
+
+    public Vector VectorTransfrom(Vector vecIn, Matrix3x4 matIn)
+    {
+        float[] arrOut = new float[3];
+
+        for(int i = 0; i < 3; i++)
+            arrOut[i] = vecIn.Dot(matIn.At(i)) + matIn.At(i, 3);
+
+        return new Vector(arrOut);
     }
 
     public float X()

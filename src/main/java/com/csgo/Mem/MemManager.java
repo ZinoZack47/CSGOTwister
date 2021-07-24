@@ -168,6 +168,15 @@ public final class MemManager
         return new Vector(mOutput.getFloat(0), mOutput.getFloat(0x4), mOutput.getFloat(0x8));
     }
 
+    public float[] ReadFloatArray(long dwAddress, int iLen)
+    {
+        IntByReference rRead = new IntByReference(0);
+        int iSize = iLen * Float.BYTES;
+        Memory mOutput = new Memory(iSize);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
+        return mOutput.getFloatArray(0, iLen);
+    }
+
     public MStudioBox ReadMStudioBox(long dwAddress)
     {
         IntByReference rRead = new IntByReference(0);
