@@ -16,6 +16,15 @@ public class Vector extends AC3Cor
         );
     }
 
+    public float Distance(Vector vecDestination)
+    {
+        return (float)Math.sqrt(
+            Math.pow(this.X() - vecDestination.X(), 2) +
+            Math.pow(this.Y() - vecDestination.Y(), 2) +
+            Math.pow(this.Z() - vecDestination.Z(), 2)
+        );
+    }
+
     public float X()
     {
         return c1;

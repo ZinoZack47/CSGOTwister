@@ -16,6 +16,65 @@ public class QAngle extends AC3Cor
         );
     }
 
+    public void Fix()
+    {
+        this.Normalize();
+        this.Clamp();
+    }
+
+    private void Normalize()
+    {
+        float[] arrAngle = this.toArray();
+
+        for(int i =0; i < 3; i++)
+        {
+            while (arrAngle[i] < -180.f)
+            {
+                arrAngle[i] += 360.f;
+            }
+            while (arrAngle[i] > 180.f)
+            {
+                arrAngle[i] -= 360.f;
+            }
+        }
+
+        this.Override(arrAngle);
+    }
+
+    void Clamp()
+    {
+		if (this.Pitch() > 89.0f) this.Pitch(89.0f);
+		else if (this.Pitch() < -89.0f) this.Pitch(-89.0f);
+
+		if (this.Yaw() > 180.0f) this.Yaw(180.0f);
+		else if (this.Yaw() < -180.0f) this.Yaw(-180.0f);
+
+		this.Roll(0);
+	}
+
+    public static QAngle VectorAngles(Vector vecForward)
+    {
+		float tmp, yaw, pitch;
+
+		if(vecForward.X() == 0 && vecForward.X() == 0)
+        {
+			yaw = 0;
+			pitch = vecForward.Z() > 0 ? 270 : 90;
+		}
+        else
+        {
+			yaw = (float)(Math.atan2(vecForward.Y(), vecForward.X()) * 180 / Math.PI);
+            if(yaw < 0) yaw += 360;
+
+			tmp = (float)Math.sqrt(vecForward.X() * vecForward.X() + vecForward.Y() * vecForward.Y());
+
+            pitch = (float)(Math.atan2(-vecForward.Z(), tmp) * 180 / Math.PI);
+			if(pitch < 0) pitch += 360;
+		}
+
+		return new QAngle(pitch, yaw, 0);
+	}
+
     public float Pitch()
     {
         return c1;
