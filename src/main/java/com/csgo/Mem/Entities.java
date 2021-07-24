@@ -26,6 +26,13 @@ public class Entities extends Offsets
         return pEnt;
     }
 
+    boolean DangerZone()
+    {
+        long pGameRules = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwGameRulesProxy);
+        int iSurvivalGRDT = MemManager.Get().ReadInt(pGameRules + m_SurvivalGameRuleDecisionTypes);
+        return (iSurvivalGRDT != 0);
+    }
+
     public boolean Dormant(long pEnt)
     {
         boolean bDormant = MemManager.Get().ReadBool(pEnt + m_bDormant);
@@ -48,6 +55,38 @@ public class Entities extends Offsets
     {
         boolean bGunGameImmune = MemManager.Get().ReadBool(pEnt + m_bGunGameImmunity);
         return bGunGameImmune;
+    }
+
+    public boolean isValidTarget(long pEnt)
+    {
+        return isValidTarget(pEnt, true);
+    }
+
+    public boolean isValidTarget(long pEnt, boolean bGunGameCheck)
+    {
+        boolean bDormant = Dormant(pEnt);
+        if(bDormant)
+            return false;
+
+        int iTeam = Team(pEnt);
+
+        if(iTeam <= 1 || iTeam == Team(LocalPlayer()) && !DangerZone())
+            return false;
+
+        int iHealth = Health(pEnt);
+
+        if(iHealth <= 0)
+            return false;
+
+        if(!bGunGameCheck)
+            return true;
+
+        boolean bGunGameImmune = GunGameImmune(pEnt);
+
+        if(bGunGameImmune)
+            return false;
+
+        return true;
     }
 
     public boolean Flashed(long pEnt)
@@ -90,6 +129,11 @@ public class Entities extends Offsets
 
     public void Spotted(long pEnt, boolean bNewSpotted)
     {
+        boolean bSpotted = Spotted(pEnt);
+
+        if(bSpotted == bNewSpotted)
+            return;
+
         MemManager.Get().WriteBool(pEnt + m_bSpotted, bNewSpotted);
     }
 }

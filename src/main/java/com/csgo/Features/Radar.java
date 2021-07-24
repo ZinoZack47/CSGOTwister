@@ -24,27 +24,11 @@ public class Radar
         if(!bToggle)
             return;
 
-        long pLocalPlayer = Entities.Get().LocalPlayer();
-
-        int iTeam = Entities.Get().Team(pLocalPlayer);
-
         for(int id = 1; id <= 32; id++)
         {
             long pPlayer = Entities.Get().EntityFromId(id);
 
-            boolean bDormant = Entities.Get().Dormant(pPlayer);
-
-            if(bDormant)
-                continue;
-
-            int iPlayerTeam = Entities.Get().Team(pPlayer);
-
-            int iPlayerHealth = Entities.Get().Health(pPlayer);
-
-            boolean bPlayerSpotted = Entities.Get().Spotted(pPlayer);
-
-            if(iPlayerTeam == 1 || iPlayerTeam == iTeam
-            || iPlayerHealth <= 0 || bPlayerSpotted)
+            if(!Entities.Get().isValidTarget(pPlayer, false))
                 continue;
 
             Entities.Get().Spotted(pPlayer, true);

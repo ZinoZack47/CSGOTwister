@@ -1,6 +1,8 @@
 package com.csgo.Mem;
 
 public abstract class Offsets {
+    protected final static long dwGameRulesProxy = 0x52C02CC;
+    protected final static long m_SurvivalGameRuleDecisionTypes = 0x1328;
     protected final static long dwLocalPlayer = 0xD8A2DC;
     protected final static long dwEntityList = 0x4DA31EC;
     protected final static long m_bDormant = 0xED;
