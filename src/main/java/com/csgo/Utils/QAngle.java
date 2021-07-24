@@ -1,27 +1,48 @@
 package com.csgo.Utils;
 
-public class QAngle
+public class QAngle extends AC3Cor
 {
-    public QAngle(float pitch, float yaw)
+    public QAngle(float flPitch, float flYaw, float flRoll)
     {
-        this(pitch, yaw, 0);
+        super(flPitch, flYaw, flRoll);
     }
 
-    public QAngle(float pitch, float yaw, float roll)
+    public static QAngle Add(QAngle ang1, QAngle ang2)
     {
-        this.pitch = pitch;
-        this.yaw = yaw;
-        this.roll = roll;
+        return new QAngle(
+            ang1.Pitch() + ang2.Pitch(),
+            ang1.Yaw() + ang2.Yaw(),
+            ang1.Roll() + ang2.Roll()
+        );
     }
 
-    public QAngle(Vector vecAngle)
+    public float Pitch()
     {
-        this.pitch = vecAngle.x;
-        this.yaw = vecAngle.y;
-        this.roll = vecAngle.x;
+        return c1;
     }
 
-    public float pitch;
-    public float yaw;
-    public float roll;
+    public float Yaw()
+    {
+        return c2;
+    }
+
+    public float Roll()
+    {
+        return c3;
+    }
+
+    public void Pitch(float flPitch)
+    {
+        c1 = flPitch;
+    }
+
+    public void Yaw(float flYaw)
+    {
+        c2 = flYaw;
+    }
+
+    public void Roll(float flRoll)
+    {
+        c3 = flRoll;
+    }
 }

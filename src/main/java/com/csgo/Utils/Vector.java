@@ -1,32 +1,48 @@
 package com.csgo.Utils;
 
-public class Vector
+public class Vector extends AC3Cor
 {
-    public Vector() {
-        this(0, 0, 0);
-    }
-
-    public Vector(float x, float y) {
-        this(x, y, 0);
-    }
-
-    public Vector(float x, float y, float z)
+    public Vector(float flX, float flY, float flZ)
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        super(flX, flY, flZ);
     }
 
     public static Vector Add(Vector vec1, Vector vec2)
     {
         return new Vector(
-            vec1.x + vec2.x,
-            vec1.y + vec2.y,
-            vec1.z + vec2.z
+            vec1.X() + vec2.X(),
+            vec1.Y() + vec2.Y(),
+            vec1.Z() + vec2.Z()
         );
     }
 
-    public float x;
-    public float y;
-    public float z;
+    public float X()
+    {
+        return c1;
+    }
+
+    public float Y()
+    {
+        return c2;
+    }
+
+    public float Z()
+    {
+        return c3;
+    }
+
+    public void X(float flX)
+    {
+        c1 = flX;
+    }
+
+    public void Y(float flY)
+    {
+        c2 = flY;
+    }
+
+    public void Z(float flZ)
+    {
+        c3 = flZ;
+    }
 }
