@@ -206,6 +206,10 @@ public class Entities extends Offsets
     public Matrix3x4[] BoneMatrix(long pEnt)
     {
         long dwBoneMatrix = MemManager.Get().ReadDWORD(pEnt + m_dwBoneMatrix);
+
+        if(dwBoneMatrix == 0)
+            return null;
+
         return MemManager.Get().ReadMatrix3x4Array(dwBoneMatrix);
     }
 

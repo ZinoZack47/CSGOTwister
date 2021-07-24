@@ -42,6 +42,9 @@ public class FlickAWP
 
             Matrix3x4[] arrBoneMatrix = Entities.Get().BoneMatrix(pEnt);
 
+            if(arrBoneMatrix == null)
+                continue;
+
             for(MStudioBox Hbx : vecHitboxes)
             {
                 Vector vecMin = Vector.VectorTransfrom(Hbx.vecBBMin, arrBoneMatrix[Hbx.iBone]);
@@ -89,8 +92,8 @@ public class FlickAWP
         if(Entities.Get().CurrentWeaponId(pLocalPlayer) != EItemDefinitionIndex.WEAPON_AWP)
             return;
 
-        if(!Entities.Get().Scoped(pLocalPlayer))
-            return;
+        //if(!Entities.Get().Scoped(pLocalPlayer))
+        //    return;
 
         if(Entities.Get().CurrentWeaponClip(pLocalPlayer) <= 0
         || Entities.Get().Reloading(pLocalPlayer))
