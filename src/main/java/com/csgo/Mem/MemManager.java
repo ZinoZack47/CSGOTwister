@@ -166,7 +166,7 @@ public final class MemManager
         int iSize = Float.BYTES * 3;
         Memory mOutput = new Memory(iSize);
         kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
-        return new Vector(mOutput.getFloat(0), mOutput.getFloat(0x4), mOutput.getFloat(0x8));
+        return new Vector(mOutput.getFloatArray(0, 3));
     }
 
     public String ReadString(long dwAddress, int iLen)

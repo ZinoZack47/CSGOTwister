@@ -32,7 +32,7 @@ public class FlickAWP
         {
             long pEnt = Entities.Get().EntityFromId(id);
 
-            if(Entities.Get().isValidTarget(pEnt))
+            if(!Entities.Get().isValidTarget(pEnt))
                 continue;
 
             ArrayList<MStudioBox> vecHitboxes = Entities.Get().Hitboxes(pEnt);
