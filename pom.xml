@@ -177,7 +177,7 @@
                     <limit>
                       <counter>COMPLEXITY</counter>
                       <value>TOTALCOUNT</value>
-                      <maximum>30</maximum>
+                      <maximum>35</maximum>
                     </limit>
                   </limits>
                 </rule>
