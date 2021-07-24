@@ -37,7 +37,7 @@ public class FlickAWP
 
             ArrayList<MStudioBox> vecHitboxes = Entities.Get().Hitboxes(pEnt);
 
-            if(vecHitboxes.isEmpty())
+            if(vecHitboxes == null || vecHitboxes.isEmpty())
                 continue;
 
             Matrix3x4[] arrBoneMatrix = Entities.Get().BoneMatrix(pEnt);
