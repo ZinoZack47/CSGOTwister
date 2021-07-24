@@ -235,6 +235,15 @@ public final class MemManager
         kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Byte.BYTES, null);
     }
 
+    public void WriteAngles(long dwAddress, QAngle qAngles)
+    {
+        Memory mOutput = new Memory(Float.BYTES * 3);
+        mOutput.setFloat(0, qAngles.Pitch());
+        mOutput.setFloat(0x4, qAngles.Yaw());
+        mOutput.setFloat(0x8, qAngles.Roll());
+        kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Float.BYTES * 3, null);
+    }
+
     public boolean isKeyPressed(Win32VK VK_KEY)
     {
         return (User32.INSTANCE.GetAsyncKeyState(VK_KEY.code) & 0x8000) != 0;

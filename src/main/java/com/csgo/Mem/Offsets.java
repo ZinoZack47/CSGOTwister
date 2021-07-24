@@ -1,6 +1,7 @@
 package com.csgo.Mem;
 
-public abstract class Offsets {
+public abstract class Offsets
+{
     protected final static long dwGameRulesProxy = 0x52C02CC;
     protected final static long m_SurvivalGameRuleDecisionTypes = 0x1328;
     protected final static long dwLocalPlayer = 0xD8A2DC;
@@ -14,7 +15,9 @@ public abstract class Offsets {
     protected final static long m_bGunGameImmunity = 0x3944;
     protected final static long m_flFlashDuration = 0x2924;
     protected final static long m_flFlashMaxAlpha = 0xA41C;
+    protected final static long m_nTickBase = 0x3430;
     protected final static long m_hActiveWeapon = 0x2EF8;
+    protected final static long m_flNextPrimaryAttack = 0x3238;
     protected final static long m_iItemDefinitionIndex = 0x2FAA;
     protected final static long m_iClip1 = 0x3264;
     protected final static long m_fFlags = 0x104;
@@ -25,4 +28,5 @@ public abstract class Offsets {
     protected final static long m_vecViewOffset = 0x108;
     protected final static long dwClientState = 0x588FEC;
     protected final static long dwClientState_ViewAngles = 0x4D90;
+    protected final static long dwGlobalVars = 0x588CF0;
 }

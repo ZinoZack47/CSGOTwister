@@ -38,6 +38,35 @@ public class AC3Cor //This stands for Abstract Class w/ 3 Coordinates
         this.c3 += flFactor;
     }
 
+    public void Sub(float flFactor)
+    {
+        this.c1 -= flFactor;
+        this.c2 -= flFactor;
+        this.c3 -= flFactor;
+    }
+
+    public void Mult(float flFactor)
+    {
+        this.c1 *= flFactor;
+        this.c2 *= flFactor;
+        this.c3 *= flFactor;
+    }
+
+    public void Div(float flFactor)
+    {
+        this.c1 /= flFactor;
+        this.c2 /= flFactor;
+        this.c3 /= flFactor;
+    }
+
+    public float Length2D()
+    {
+        return (float)Math.sqrt(
+            Math.pow(this.c1, 2) +
+            Math.pow(this.c2, 2)
+        );
+    }
+
     public void Override(float Array3C[]) // 3C Stands for 3 Coordinates
     {
         if(Array3C.length != 3)

@@ -112,12 +112,38 @@ public class Entities extends Offsets
         boolean bIsReloading = MemManager.Get().ReadBool(pEnt + m_bInReload);
         return bIsReloading;
     }
-    public EItemDefinitionIndex CurrentWeaponId(long pEnt)
+
+    public boolean Scoped(long pEnt)
+    {
+        boolean bIsScoped = MemManager.Get().ReadBool(pEnt + m_bIsScoped);
+        return bIsScoped;
+    }
+
+    public int nTickBase()
+    {
+        int iTickBase = MemManager.Get().ReadInt(LocalPlayer() + m_nTickBase);
+        return iTickBase;
+    }
+
+    public long CurrentWeaponEnt(long pEnt)
     {
         long dwWeapAddress = MemManager.Get().ReadDWORD(pEnt + m_hActiveWeapon) & 0xFFF;
         long dwWeapEnt = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (dwWeapAddress - 0x01) * 0x10);
+        return dwWeapEnt;
+    }
+
+    public EItemDefinitionIndex CurrentWeaponId(long pEnt)
+    {
+        long dwWeapEnt = CurrentWeaponEnt(pEnt);
         short iWeapId = MemManager.Get().ReadShort(dwWeapEnt + m_iItemDefinitionIndex);
         return EItemDefinitionIndex.valueOf(iWeapId);
+    }
+
+    public float GetCurrentWeaponNextAttack(long pEnt)
+    {
+        long dwWeapEnt = CurrentWeaponEnt(pEnt);
+        float flNextPrimaryAttack = MemManager.Get().ReadInt(dwWeapEnt + m_flNextPrimaryAttack);
+        return flNextPrimaryAttack;
     }
 
     public int CurrentWeaponClip(long pEnt)
@@ -144,8 +170,21 @@ public class Entities extends Offsets
     public QAngle ClientViewAngles()
     {
         long dwCState = MemManager.Get().ReadDWORD(MemManager.Get().Engine() + dwClientState);
-        QAngle QViewAngles = new QAngle(MemManager.Get().ReadVector(dwCState + dwClientState_ViewAngles));
-        return QViewAngles;
+        QAngle qViewAngles = new QAngle(MemManager.Get().ReadVector(dwCState + dwClientState_ViewAngles));
+        return qViewAngles;
+    }
+
+    public void ClientViewAngles(QAngle qViewAngles)
+    {
+        long dwCState = MemManager.Get().ReadDWORD(MemManager.Get().Engine() + dwClientState);
+        MemManager.Get().WriteAngles(dwCState + dwClientState_ViewAngles, qViewAngles);
+    }
+
+    public float IntervalPerTick()
+    {
+        long pGlobalVars = MemManager.Get().ReadDWORD(MemManager.Get().Engine() + dwGlobalVars);
+        float flIntervalPerTick = MemManager.Get().ReadFloat(pGlobalVars + 0x20);
+        return flIntervalPerTick;
     }
 
     public boolean Spotted(long pEnt)

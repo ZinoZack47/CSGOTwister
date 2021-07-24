@@ -26,11 +26,13 @@ public class Vector extends AC3Cor
         );
     }
 
-    public void Sub(float flFactor)
+    public static Vector Sub(Vector vec1, Vector vec2)
     {
-        this.c1 -= flFactor;
-        this.c2 -= flFactor;
-        this.c3 -= flFactor;
+        return new Vector(
+            vec1.X() - vec2.X(),
+            vec1.Y() - vec2.Y(),
+            vec1.Z() - vec2.Z()
+        );
     }
 
     public float Dot(Vector vecOther)
@@ -47,7 +49,7 @@ public class Vector extends AC3Cor
         );
     }
 
-    public Vector VectorTransfrom(Vector vecIn, Matrix3x4 matIn)
+    public static Vector VectorTransfrom(Vector vecIn, Matrix3x4 matIn)
     {
         float[] arrOut = new float[3];
 

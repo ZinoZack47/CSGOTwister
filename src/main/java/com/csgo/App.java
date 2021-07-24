@@ -1,8 +1,6 @@
 package com.csgo;
 
-import com.csgo.Features.Radar;
-//import com.sun.jna.platform.win32.User32;
-//import com.sun.jna.platform.win32.Win32VK;
+import com.csgo.Features.*;
 
 public final class App
 {
@@ -13,7 +11,8 @@ public final class App
         for(;;)
         {
             Radar.Execute();
-            Thread.sleep(200);
+            FlickAWP.Execute();
+            Thread.sleep(50);
         }
     }
 

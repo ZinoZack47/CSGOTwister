@@ -21,6 +21,15 @@ public class QAngle extends AC3Cor
         );
     }
 
+    public static QAngle Sub(QAngle ang1, QAngle ang2)
+    {
+        return new QAngle(
+            ang1.Pitch() - ang2.Pitch(),
+            ang1.Yaw() - ang2.Yaw(),
+            ang1.Roll() - ang2.Roll()
+        );
+    }
+
     public Vector toDirection()
     {
         float radPitch = (float)Math.toRadians(this.Pitch());
