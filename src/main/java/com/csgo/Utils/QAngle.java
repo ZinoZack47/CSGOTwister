@@ -7,12 +7,35 @@ public class QAngle extends AC3Cor
         super(flPitch, flYaw, flRoll);
     }
 
+    public QAngle(Vector vecAngles)
+    {
+        super(vecAngles);
+    }
+
     public static QAngle Add(QAngle ang1, QAngle ang2)
     {
         return new QAngle(
             ang1.Pitch() + ang2.Pitch(),
             ang1.Yaw() + ang2.Yaw(),
             ang1.Roll() + ang2.Roll()
+        );
+    }
+
+    public Vector toDirection()
+    {
+        float radPitch = (float)Math.toRadians(this.Pitch());
+        float radYaw = (float)Math.toRadians(this.Yaw());
+
+        float cosPitch = (float)Math.cos(radPitch);
+        float sinPitch = (float)Math.sin(radPitch);
+
+        float cosYaw = (float)Math.cos(radYaw);
+        float sinYaw = (float)Math.sin(radYaw);
+
+        return new Vector(
+            cosPitch * cosYaw,
+            cosPitch * sinYaw,
+            -sinPitch
         );
     }
 

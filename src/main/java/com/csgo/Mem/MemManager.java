@@ -14,6 +14,7 @@ import com.sun.jna.win32.W32APIOptions;
 import com.sun.jna.platform.win32.WinBase;
 
 import com.csgo.Utils.*;
+import com.csgo.Utils.Enums.EHitboxIndex;
 
 public final class MemManager
 {
@@ -168,13 +169,13 @@ public final class MemManager
         return new Vector(mOutput.getFloat(0), mOutput.getFloat(0x4), mOutput.getFloat(0x8));
     }
 
-    public float[] ReadFloatArray(long dwAddress, int iLen)
+    public String ReadString(long dwAddress, int iLen)
     {
         IntByReference rRead = new IntByReference(0);
-        int iSize = iLen * Float.BYTES;
+        int iSize = iLen;
         Memory mOutput = new Memory(iSize);
         kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
-        return mOutput.getFloatArray(0, iLen);
+        return mOutput.getString(0);
     }
 
     public MStudioBox ReadMStudioBox(long dwAddress)
@@ -204,6 +205,20 @@ public final class MemManager
             ),
             mOutput.getFloat(0x30)
         );
+    }
+
+    public Matrix3x4[] ReadMatrix3x4Array(long dwAddress)
+    {
+        IntByReference rRead = new IntByReference(0);
+        Matrix3x4[] matResult = new Matrix3x4[EHitboxIndex.MAXSTUDIOBONES];
+        int iSize = EHitboxIndex.MAXSTUDIOBONES * Matrix3x4.SIZE;
+        Memory mOutput = new Memory(iSize);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
+
+        for(int i = 0; i < EHitboxIndex.MAXSTUDIOBONES; i++)
+            matResult[i] = new Matrix3x4(mOutput.getFloatArray(i * Matrix3x4.SIZE, Matrix3x4.Length));
+
+        return matResult;
     }
 
     public void WriteFloat(long dwAddress, float flValue)

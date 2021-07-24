@@ -1,5 +1,8 @@
 package com.csgo.Mem;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.csgo.Utils.*;
 import com.csgo.Utils.Enums.*;
 
@@ -109,7 +112,7 @@ public class Entities extends Offsets
         boolean bIsReloading = MemManager.Get().ReadBool(pEnt + m_bInReload);
         return bIsReloading;
     }
-    public EItemDefinitionIndex CurrentWeaponId(Long pEnt)
+    public EItemDefinitionIndex CurrentWeaponId(long pEnt)
     {
         long dwWeapAddress = MemManager.Get().ReadDWORD(pEnt + m_hActiveWeapon) & 0xFFF;
         long dwWeapEnt = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (dwWeapAddress - 0x01) * 0x10);
@@ -117,7 +120,7 @@ public class Entities extends Offsets
         return EItemDefinitionIndex.valueOf(iWeapId);
     }
 
-    public int CurrentWeaponClip(Long pEnt)
+    public int CurrentWeaponClip(long pEnt)
     {
         long dwWeapAddress = MemManager.Get().ReadDWORD(pEnt + m_hActiveWeapon) & 0xFFF;
         long dwWeapEnt = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwEntityList + (dwWeapAddress - 0x01) * 0x10);
@@ -138,6 +141,13 @@ public class Entities extends Offsets
         return Vector.Add(vecOrigin, vecViewOffset);
     }
 
+    public QAngle ClientViewAngles()
+    {
+        long dwCState = MemManager.Get().ReadDWORD(MemManager.Get().Engine() + dwClientState);
+        QAngle QViewAngles = new QAngle(MemManager.Get().ReadVector(dwCState + dwClientState_ViewAngles));
+        return QViewAngles;
+    }
+
     public boolean Spotted(long pEnt)
     {
         boolean bSpotted = MemManager.Get().ReadBool(pEnt + m_bSpotted);
@@ -154,10 +164,67 @@ public class Entities extends Offsets
         MemManager.Get().WriteBool(pEnt + m_bSpotted, bNewSpotted);
     }
 
-    public Matrix3x4 BoneMatrix(long pEnt)
+    public Matrix3x4[] BoneMatrix(long pEnt)
     {
         long dwBoneMatrix = MemManager.Get().ReadDWORD(pEnt + m_dwBoneMatrix);
-        return new Matrix3x4(MemManager.Get().ReadFloatArray(dwBoneMatrix, Matrix3x4.Length));
+        return MemManager.Get().ReadMatrix3x4Array(dwBoneMatrix);
+    }
+
+    public ArrayList<MStudioBox> Hitboxes(long pEnt)
+    {
+        long pStudioHdr = MemManager.Get().ReadDWORD(pEnt + m_pStudioHdr);
+
+        if(pStudioHdr == 0)
+            return null;
+
+        long dwModel = MemManager.Get().ReadDWORD(pEnt + 0x6C);
+
+        String szModelName = MemManager.Get().ReadString(dwModel + 0x4, 128);
+
+        if(szModelName.isEmpty())
+            return null;
+
+        return Parse(pStudioHdr, szModelName);
+    }
+
+    private ArrayList<MStudioBox> Parse(long pStudioHdr, String szModelName)
+    {
+        if(mapModelHitboxes.containsKey(szModelName))
+            return mapModelHitboxes.get(szModelName);
+
+        long HitboxSetIdx = MemManager.Get().ReadDWORD(pStudioHdr + 0xB0);
+
+        if(HitboxSetIdx < 0)
+            return null;
+
+        long StudioHitboxSet = MemManager.Get().ReadDWORD(pStudioHdr + HitboxSetIdx);
+        int iHitboxesNum = MemManager.Get().ReadInt(StudioHitboxSet + 0x4);
+
+        if(iHitboxesNum <= 0)
+            return null;
+
+        int iHitboxIndex = MemManager.Get().ReadInt(StudioHitboxSet + 0x8);
+
+        ArrayList<MStudioBox> vecModelHitboxes = new ArrayList<MStudioBox>();
+
+        for (int i = 0; i < iHitboxesNum; i++)
+        {
+            MStudioBox ModelHitbox = MemManager.Get().ReadMStudioBox(0x44 * i + iHitboxIndex + StudioHitboxSet);
+
+            if(ModelHitbox.flRadius != -1.f)
+            {
+                ModelHitbox.vecBBMin.Sub(ModelHitbox.flRadius);
+                ModelHitbox.vecBBMax.Add(ModelHitbox.flRadius);
+            }
+
+            vecModelHitboxes.add(ModelHitbox);
+        }
+
+        if(vecModelHitboxes.isEmpty())
+            return null;
+
+        mapModelHitboxes.put(szModelName, vecModelHitboxes);
+        return mapModelHitboxes.get(szModelName);
     }
 
     public Vector GetHitboxPos(long pEnt, EHitboxIndex eBone)
@@ -165,4 +232,5 @@ public class Entities extends Offsets
         return null;
     }
 
+    private HashMap<String, ArrayList<MStudioBox>> mapModelHitboxes = new HashMap<String, ArrayList<MStudioBox>>();
 }

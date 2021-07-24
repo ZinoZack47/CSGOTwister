@@ -26,6 +26,13 @@ public class Vector extends AC3Cor
         );
     }
 
+    public void Sub(float flFactor)
+    {
+        this.c1 -= flFactor;
+        this.c2 -= flFactor;
+        this.c3 -= flFactor;
+    }
+
     public float Dot(Vector vecOther)
     {
         return this.X() * vecOther.X() + this.Y() * vecOther.Y() + this.Z() * vecOther.Z();
@@ -79,4 +86,5 @@ public class Vector extends AC3Cor
     {
         c3 = flZ;
     }
+
 }

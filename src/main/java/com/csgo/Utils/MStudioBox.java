@@ -12,11 +12,11 @@ public class MStudioBox
         this.flRadius = flRadius;
     }
 
-    int			iBone;
-	int			iGroup;
-	Vector		vecBBMin;
-	Vector		vecBBMax;
-	int			nHitboxNameIndex;
-	Vector		angOffsetOrientation;
-	float		flRadius;
+    public int		iBone;
+	public int		iGroup;
+	public Vector	vecBBMin;
+	public Vector	vecBBMax;
+	public int		nHitboxNameIndex;
+	public Vector	angOffsetOrientation;
+	public float	flRadius;
 }

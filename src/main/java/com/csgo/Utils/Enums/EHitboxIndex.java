@@ -24,8 +24,8 @@ public enum EHitboxIndex
 	HITBOX_LEFT_FOREARM,
 	HITBOX_MAX;
 
-    public final int MAXSTUDIOBONES = 128;
-    public final int ONE_USED_BY_HITBOX = 0x00000100;
+    public static final int MAXSTUDIOBONES = 128;
+    public static final int ONE_USED_BY_HITBOX = 0x00000100;
 
     public int Index()
     {
