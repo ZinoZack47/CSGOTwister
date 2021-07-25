@@ -54,7 +54,7 @@ public class FlickAWP
                 QAngle qHbxAngles = QAngle.VectorAngles(Vector.Sub(vecHbxPos, vecLocalPos));
                 qHbxAngles.Fix();
                 float Fov = GetFovToPlayer(qViewAngles, qHbxAngles);
-                if(flBestFov == null || Fov < flBestFov)
+                if(Fov < flBestFov)
                 {
                     qTargetAngles = qHbxAngles;
                     flBestFov = Fov;

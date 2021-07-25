@@ -2,7 +2,9 @@ package com.csgo.Utils;
 
 public class MStudioBox
 {
-    public MStudioBox(int iBone, int iGroup, Vector vecBBMin, Vector vecBBMax, int nHitboxNameIndex, Vector angOffsetOrientation, float flRadius) {
+    public MStudioBox(int iBone, int iGroup, Vector vecBBMin, Vector vecBBMax,
+    int nHitboxNameIndex, QAngle angOffsetOrientation, float flRadius)
+    {
         this.iBone = iBone;
         this.iGroup = iGroup;
         this.vecBBMin = vecBBMin;
@@ -17,6 +19,6 @@ public class MStudioBox
 	public Vector	vecBBMin;
 	public Vector	vecBBMax;
 	public int		nHitboxNameIndex;
-	public Vector	angOffsetOrientation;
+	public QAngle	angOffsetOrientation;
 	public float	flRadius;
 }

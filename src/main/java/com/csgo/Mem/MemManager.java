@@ -175,7 +175,7 @@ public final class MemManager
         int iSize = iLen;
         Memory mOutput = new Memory(iSize);
         kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
-        return mOutput.getString(0);
+        return new String(mOutput.getByteArray(0, iLen));
     }
 
     public MStudioBox ReadMStudioBox(long dwAddress)
@@ -185,24 +185,12 @@ public final class MemManager
         Memory mOutput = new Memory(iSize);
         kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
         return new MStudioBox(
-            mOutput.getInt(0),
+            mOutput.getInt(0x0),
             mOutput.getInt(0x4),
-            new Vector(
-                mOutput.getFloat(0x8),
-                mOutput.getFloat(0xC),
-                mOutput.getFloat(0x10)
-            ),
-            new Vector(
-                mOutput.getFloat(0x14),
-                mOutput.getFloat(0x18),
-                mOutput.getFloat(0x1C)
-            ),
+            new Vector(mOutput.getFloatArray(0x8, 3)),
+            new Vector(mOutput.getFloatArray(0x14, 3)),
             mOutput.getInt(0x20),
-            new Vector(
-                mOutput.getFloat(0x24),
-                mOutput.getFloat(0x28),
-                mOutput.getFloat(0x2C)
-            ),
+            new QAngle(mOutput.getFloatArray(0x24, 3)),
             mOutput.getFloat(0x30)
         );
     }

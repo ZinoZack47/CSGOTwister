@@ -12,6 +12,11 @@ public class QAngle extends AC3Cor
         super(vecAngles);
     }
 
+    public QAngle(float[] arrAngles)
+    {
+        super(arrAngles);
+    }
+
     public static QAngle Add(QAngle ang1, QAngle ang2)
     {
         return new QAngle(

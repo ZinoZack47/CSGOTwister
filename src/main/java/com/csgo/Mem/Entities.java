@@ -235,7 +235,7 @@ public class Entities extends Offsets
         if(mapModelHitboxes.containsKey(szModelName))
             return mapModelHitboxes.get(szModelName);
 
-        long HitboxSetIdx = MemManager.Get().ReadDWORD(pStudioHdr + 0xB0);
+        int HitboxSetIdx = MemManager.Get().ReadInt(pStudioHdr + 0xB0);
 
         if(HitboxSetIdx < 0)
             return null;
@@ -268,11 +268,6 @@ public class Entities extends Offsets
 
         mapModelHitboxes.put(szModelName, vecModelHitboxes);
         return mapModelHitboxes.get(szModelName);
-    }
-
-    public Vector GetHitboxPos(long pEnt, EHitboxIndex eBone)
-    {
-        return null;
     }
 
     private HashMap<String, ArrayList<MStudioBox>> mapModelHitboxes = new HashMap<String, ArrayList<MStudioBox>>();
