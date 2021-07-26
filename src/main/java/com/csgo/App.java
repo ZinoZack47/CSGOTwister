@@ -11,6 +11,7 @@ public final class App
         for(;;)
         {
             Radar.Execute();
+            RayTrig.Execute();
             FlickAWP.Execute();
             Thread.sleep(50);
         }

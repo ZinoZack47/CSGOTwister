@@ -6,6 +6,10 @@ import java.util.HashMap;
 import com.csgo.Utils.*;
 import com.csgo.Utils.Enums.*;
 
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+import java.awt.AWTException;
+
 public class Entities extends Offsets
 {
     private Entities() { }
@@ -15,6 +19,64 @@ public class Entities extends Offsets
     public static Entities Get()
     {
         return INSTANCE;
+    }
+
+    public void ForceAttack()
+    {
+        try
+        {
+            int iPreFire = 0, iPostFire = 0;
+            EItemDefinitionIndex WeaponId = CurrentWeaponId(LocalPlayer());
+            switch(EWeaponType.WeaponTypeFromId(WeaponId))
+            {
+            case WEAPONTYPE_PISTOL:
+            iPreFire = 30;
+            iPostFire = 10;
+            break;
+            case WEAPONTYPE_SUBMACHINEGUN:
+            iPreFire = 20;
+            iPostFire = 10;
+            break;
+            case WEAPONTYPE_RIFLE:
+            iPreFire = 50;
+            iPostFire = 500;
+            break;
+            case WEAPONTYPE_SHOTGUN:
+            iPreFire = 20;
+            iPostFire = 10;
+            break;
+            case WEAPONTYPE_MACHINEGUN:
+            iPreFire = 20;
+            iPostFire = 10;
+            break;
+            case WEAPONTYPE_SNIPER:
+            iPreFire = 20;
+            iPostFire = 1500;
+            break;
+            case WEAPONTYPE_AUTONOOB:
+            iPreFire = 20;
+            iPostFire = 500;
+            break;
+            case WEAPONTYPE_HEAVYPISTOL:
+            iPreFire = 30;
+            iPostFire = 1000;
+            default: return;
+            }
+            Thread.sleep(iPreFire);
+            Robot bot = new Robot();
+            bot.mousePress(InputEvent.BUTTON1_MASK);
+            Thread.sleep(10);
+            bot.mouseRelease(InputEvent.BUTTON1_MASK);
+            Thread.sleep(iPostFire);
+        }
+        catch (AWTException Ex)
+        {
+            Ex.printStackTrace();
+        }
+        catch (InterruptedException Ex)
+        {
+            Ex.printStackTrace();
+        }
     }
 
     public long LocalPlayer()
