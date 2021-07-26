@@ -3,12 +3,18 @@ package com.csgo.Features;
 import java.util.ArrayList;
 
 import com.csgo.Mem.Entities;
+import com.csgo.Mem.MemManager;
 import com.csgo.Utils.*;
+
+import com.sun.jna.platform.win32.Win32VK;
 
 public class RayTrig
 {
     public static void Execute()
     {
+        if(!MemManager.Get().isKeyPressed(Win32VK.VK_MENU))
+            return;
+
         long pLocalPlayer = Entities.Get().LocalPlayer();
 
         if(!Entities.Get().Alive(pLocalPlayer))
