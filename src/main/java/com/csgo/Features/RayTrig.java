@@ -17,6 +17,9 @@ public class RayTrig
 
         long pLocalPlayer = Entities.Get().LocalPlayer();
 
+        if(pLocalPlayer == 0)
+            return;
+
         if(!Entities.Get().Alive(pLocalPlayer))
             return;
 
@@ -25,7 +28,8 @@ public class RayTrig
         Vector vecDirection = qViewAngles.toDirection();
 
         Ray Beam = new Ray(vecLocalPos, vecDirection);
-        for (int id = 1; id <= 32; id++)
+
+        for (int id = 1; id <= 64; id++)
         {
             long pEnt = Entities.Get().EntityFromId(id);
 

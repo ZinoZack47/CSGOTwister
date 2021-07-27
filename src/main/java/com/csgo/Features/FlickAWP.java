@@ -86,6 +86,9 @@ public class FlickAWP
 
         long pLocalPlayer = Entities.Get().LocalPlayer();
 
+        if(pLocalPlayer == 0)
+            return;
+
         if(!Entities.Get().Alive(pLocalPlayer))
             return;
 

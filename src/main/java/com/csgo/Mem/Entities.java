@@ -129,6 +129,9 @@ public class Entities extends Offsets
 
     public boolean isValidTarget(long pEnt, boolean bGunGameCheck)
     {
+        if(pEnt == 0)
+            return false;
+
         boolean bDormant = Dormant(pEnt);
         if(bDormant)
             return false;
@@ -154,7 +157,7 @@ public class Entities extends Offsets
 
     public boolean Alive(long pEnt)
     {
-        return Health(pEnt) > 0;
+        return (Health(pEnt) > 0);
     }
 
     public boolean Flashed(long pEnt)

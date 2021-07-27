@@ -24,7 +24,7 @@ public class Radar
         if(!bToggle)
             return;
 
-        for(int id = 1; id <= 32; id++)
+        for(int id = 1; id <= 64; id++)
         {
             long pPlayer = Entities.Get().EntityFromId(id);
 
