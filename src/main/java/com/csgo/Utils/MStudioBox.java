@@ -21,4 +21,6 @@ public class MStudioBox
 	public int		nHitboxNameIndex;
 	public QAngle	angOffsetOrientation;
 	public float	flRadius;
+
+    public static final int SIZE = 52;
 }

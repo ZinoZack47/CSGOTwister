@@ -163,7 +163,7 @@ public final class MemManager
     public Vector ReadVector(long dwAddress)
     {
         IntByReference rRead = new IntByReference(0);
-        int iSize = Float.BYTES * 3;
+        final int iSize = Float.BYTES * 3;
         Memory mOutput = new Memory(iSize);
         kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
         return new Vector(mOutput.getFloatArray(0, 3));
@@ -172,18 +172,16 @@ public final class MemManager
     public String ReadString(long dwAddress, int iLen)
     {
         IntByReference rRead = new IntByReference(0);
-        int iSize = iLen;
-        Memory mOutput = new Memory(iSize);
-        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
+        Memory mOutput = new Memory(iLen);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iLen, rRead);
         return new String(mOutput.getByteArray(0, iLen));
     }
 
     public MStudioBox ReadMStudioBox(long dwAddress)
     {
         IntByReference rRead = new IntByReference(0);
-        int iSize = Integer.BYTES * 3 + Float.BYTES * 3 * 3 + Float.BYTES;
-        Memory mOutput = new Memory(iSize);
-        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
+        Memory mOutput = new Memory(MStudioBox.SIZE);
+        kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, MStudioBox.SIZE, rRead);
         return new MStudioBox(
             mOutput.getInt(0x0),
             mOutput.getInt(0x4),
@@ -199,7 +197,7 @@ public final class MemManager
     {
         IntByReference rRead = new IntByReference(0);
         Matrix3x4[] matResult = new Matrix3x4[EHitboxIndex.MAXSTUDIOBONES];
-        int iSize = EHitboxIndex.MAXSTUDIOBONES * Matrix3x4.SIZE;
+        final int iSize = EHitboxIndex.MAXSTUDIOBONES * Matrix3x4.SIZE;
         Memory mOutput = new Memory(iSize);
         kernel32.ReadProcessMemory(hProc, new Pointer(dwAddress), mOutput, iSize, rRead);
 
