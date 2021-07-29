@@ -305,7 +305,7 @@ public class Entities extends Offsets
         if(HitboxSetIdx < 0)
             return null;
 
-        long StudioHitboxSet = MemManager.Get().ReadDWORD(pStudioHdr + HitboxSetIdx);
+        long StudioHitboxSet = pStudioHdr + HitboxSetIdx;
         int iHitboxesNum = MemManager.Get().ReadInt(StudioHitboxSet + 0x4);
 
         if(iHitboxesNum <= 0)
