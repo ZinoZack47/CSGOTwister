@@ -285,7 +285,10 @@ public class Entities extends Offsets
         if(pStudioHdr == 0)
             return null;
 
-        pStudioHdr = MemManager.Get().ReadDWORD(pStudioHdr);
+        long dwStudioHdr = MemManager.Get().ReadDWORD(pStudioHdr);
+
+        if(dwStudioHdr == 0)
+            return null;
 
         long dwModel = MemManager.Get().ReadDWORD(pEnt + 0x6C);
 
@@ -294,20 +297,20 @@ public class Entities extends Offsets
         if(szModelName.isEmpty())
             return null;
 
-        return Parse(pStudioHdr, szModelName);
+        return Parse(dwStudioHdr, szModelName);
     }
 
-    private ArrayList<MStudioBox> Parse(long pStudioHdr, String szModelName)
+    private ArrayList<MStudioBox> Parse(long dwStudioHdr, String szModelName)
     {
         if(mapModelHitboxes.containsKey(szModelName))
             return mapModelHitboxes.get(szModelName);
 
-        int HitboxSetIdx = MemManager.Get().ReadInt(pStudioHdr + 0xB0);
+        int HitboxSetIdx = MemManager.Get().ReadInt(dwStudioHdr + 0xB0);
 
         if(HitboxSetIdx < 0)
             return null;
 
-        long StudioHitboxSet = pStudioHdr + HitboxSetIdx;
+        long StudioHitboxSet = dwStudioHdr + HitboxSetIdx;
         int iHitboxesNum = MemManager.Get().ReadInt(StudioHitboxSet + 0x4);
 
         if(iHitboxesNum <= 0)
