@@ -285,6 +285,8 @@ public class Entities extends Offsets
         if(pStudioHdr == 0)
             return null;
 
+        pStudioHdr = MemManager.Get().ReadDWORD(pStudioHdr);
+
         long dwModel = MemManager.Get().ReadDWORD(pEnt + 0x6C);
 
         String szModelName = MemManager.Get().ReadString(dwModel + 0x4, 128);
