@@ -43,6 +43,9 @@ public class RayTrig
 
             Matrix3x4[] arrBoneMatrix = Entities.Get().BoneMatrix(pEnt);
 
+            if(arrBoneMatrix == null)
+                continue;
+
             for (MStudioBox Hbx : arrHitBoxes)
             {
                 if(!Beam.Trace(arrBoneMatrix[Hbx.iBone], Hbx.vecBBMin, Hbx.vecBBMax))
