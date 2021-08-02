@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import com.csgo.Mem.Entities;
 import com.csgo.Mem.MemManager;
+import com.csgo.Mem.CWMouseHook;
 import com.csgo.Utils.*;
 import com.csgo.Utils.Enums.EItemDefinitionIndex;
-
 import com.sun.jna.platform.win32.Win32VK;
 
 /**
@@ -14,6 +14,11 @@ import com.sun.jna.platform.win32.Win32VK;
  */
 public class FlickAWP
 {
+    public static void Start()
+    {
+        CWMouseHook.Get().setMouseHook();
+    }
+
     private static float GetFovToPlayer(QAngle viewAngle, QAngle aimAngle)
     {
         QAngle delta = QAngle.Sub(aimAngle, viewAngle);
