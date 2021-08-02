@@ -3,11 +3,9 @@ package com.csgo.Features;
 import java.util.ArrayList;
 
 import com.csgo.Mem.Entities;
-import com.csgo.Mem.MemManager;
 import com.csgo.Mem.CWMouseHook;
 import com.csgo.Utils.*;
 import com.csgo.Utils.Enums.EItemDefinitionIndex;
-import com.sun.jna.platform.win32.Win32VK;
 
 /**
  * FlickAWP
@@ -86,9 +84,6 @@ public class FlickAWP
 
     public static void Execute()
     {
-        if(!MemManager.Get().isKeyPressed(Win32VK.VK_LBUTTON))
-            return;
-
         long pLocalPlayer = Entities.Get().LocalPlayer();
 
         if(pLocalPlayer == 0)

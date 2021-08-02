@@ -107,6 +107,14 @@ public class CWMouseHook
                     {
                         case CWMouseHook.WM_LBUTTONDOWN:
                             FlickAWP.Execute();
+                            try
+                            {
+                                Thread.sleep(50);
+                            }
+                            catch (InterruptedException ex)
+                            {
+                                ex.printStackTrace();
+                            }
                             break;
                         case CWMouseHook.WM_RBUTTONDOWN:
                             //do stuff
