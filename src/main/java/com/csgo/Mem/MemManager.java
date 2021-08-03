@@ -32,10 +32,17 @@ public final class MemManager
 
     private MemManager()
     {
-        if(!CatchGame(szTarget))
+        while(!CatchGame(szTarget))
         {
-            System.out.println("Couldn't find " + szTarget);
-            System.exit(1);
+            try
+            {
+                Runtime.getRuntime().exec("cls");
+                System.out.println("Awaiting...");
+            }
+            catch(Exception e)
+            {
+                //DO-Nothing
+            }
         }
 
         if((pClient = CatchModule(iPid, "client.dll")) == null)
