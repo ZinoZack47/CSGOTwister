@@ -8,7 +8,7 @@ public final class App
 
     public static void main(String[] args) throws Exception
     {
-        FlickAWP.Start();
+        FlickAWP.Setup();
         for(;;)
         {
             Radar.Execute();

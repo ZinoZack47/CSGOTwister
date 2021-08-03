@@ -3,18 +3,30 @@ package com.csgo.Features;
 import java.util.ArrayList;
 
 import com.csgo.Mem.Entities;
-import com.csgo.Mem.CWMouseHook;
 import com.csgo.Utils.*;
 import com.csgo.Utils.Enums.EItemDefinitionIndex;
+
+import lc.kra.system.mouse.GlobalMouseHook;
+import lc.kra.system.mouse.event.GlobalMouseAdapter;
+import lc.kra.system.mouse.event.GlobalMouseEvent;
 
 /**
  * FlickAWP
  */
 public class FlickAWP
 {
-    public static void Start()
+    public static void Setup()
     {
-        CWMouseHook.Get().setMouseHook();
+        GlobalMouseHook GMH = new GlobalMouseHook(true);
+        GMH.addMouseListener(new GlobalMouseAdapter() {
+            @Override
+            public void mousePressed(GlobalMouseEvent event)
+            {
+                if(event.getButton() == GlobalMouseEvent.BUTTON_LEFT) {
+                    Execute();
+                }
+            }
+        });
     }
 
     private static float GetFovToPlayer(QAngle viewAngle, QAngle aimAngle)
