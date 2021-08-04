@@ -104,7 +104,8 @@ public class FlickAWP
         if(!Entities.Get().Alive(pLocalPlayer))
             return;
 
-        if(Entities.Get().CurrentWeaponId(pLocalPlayer) != EItemDefinitionIndex.WEAPON_AWP)
+        if(Entities.Get().CurrentWeaponId(pLocalPlayer) != EItemDefinitionIndex.WEAPON_AWP
+            && Entities.Get().CurrentWeaponId(pLocalPlayer) != EItemDefinitionIndex.WEAPON_SSG08)
             return;
 
         //if(!Entities.Get().Scoped(pLocalPlayer))
