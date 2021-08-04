@@ -118,6 +118,9 @@ public enum EItemDefinitionIndex
     }
 
     public static EItemDefinitionIndex valueOf(short Index) {
+        if(map.get(Index) == null)
+            return WEAPON_NONE;
+
         return map.get(Index);
     }
 

@@ -108,8 +108,8 @@ public class FlickAWP
             && Entities.Get().CurrentWeaponId(pLocalPlayer) != EItemDefinitionIndex.WEAPON_SSG08)
             return;
 
-        //if(!Entities.Get().Scoped(pLocalPlayer))
-        //    return;
+        if(!Entities.Get().Scoped(pLocalPlayer))
+            return;
 
         if(Entities.Get().CurrentWeaponClip(pLocalPlayer) <= 0
         || Entities.Get().Reloading(pLocalPlayer))

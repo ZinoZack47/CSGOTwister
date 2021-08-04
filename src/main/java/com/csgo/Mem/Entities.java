@@ -273,34 +273,30 @@ public class Entities extends Offsets
         int iClassId = MemManager.Get().ReadInt(
             MemManager.Get().ReadDWORD(
                 MemManager.Get().ReadDWORD(
-                    MemManager.Get().ReadDWORD((pEnt + 0x8) + 0x8) + 0x1) + 0x14));
+                    MemManager.Get().ReadDWORD(pEnt + 0x8) + 0x8) + 0x1) + 0x14);
         return EClassIndex.valueOf(iClassId);
     }
 
     private float[] GetClassGlowColor(long pEnt)
     {
         float flRed = 0f, flGreen = 0f, flBlue = 0f;
-        float[] Black = new float[]{0.f, 0f, 0f};
-
-        if (pEnt == 0)
-            return Black;
 
         switch (GetEntClassId(pEnt))
         {
         case CCSPlayer:
         {
             if (Dormant(pEnt))
-                return Black;
+                return null;
 
             int iHp = Health(pEnt);
 
             if (iHp <= 0)
-                return Black;
+                return null;
 
             int iTeam = Team(pEnt);
 
             if (iTeam <= 1 || iTeam == Team(LocalPlayer()) && !DangerZone())
-                return Black;
+                return null;
 
             flGreen = Math.min(iHp * 2.55f, 255.f);
             flRed = 255.f - flGreen;
@@ -310,7 +306,7 @@ public class Entities extends Offsets
         case CWeaponHKP2000:
         {
             if(EWeaponType.WeaponTypeFromId(CurrentWeaponId(LocalPlayer())) != EWeaponType.WEAPONTYPE_KNIFE)
-                return Black;
+                return null;
         }
         case CDEagle:
         case CWeaponSSG08:
@@ -349,7 +345,7 @@ public class Entities extends Offsets
         }
         case CPlantedC4:
         case CBreachChargeProjectile: break;
-        default: return Black;
+        default: return null;
         }
 
         return new float[]{flRed, flGreen, flBlue};
@@ -364,6 +360,9 @@ public class Entities extends Offsets
             long dwEnt = MemManager.Get().ReadDWORD(pGlowObjectManager + (i * 0x38) + 0x4);
 
             float[] RGB = GetClassGlowColor(dwEnt);
+
+            if(RGB == null)
+                continue;
 
             MemManager.Get().WriteFloat(pGlowObjectManager + (i * 0x38) + 0x8, RGB[0] / 255.f);
             MemManager.Get().WriteFloat(pGlowObjectManager + (i * 0x38) + 0xC, RGB[1] / 255.f);

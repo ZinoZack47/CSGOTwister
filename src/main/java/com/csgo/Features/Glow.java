@@ -13,6 +13,6 @@ public class Glow
         {
             bToggle = !bToggle;
         }
-        Entities.Get().GlowEntities();
+        if(bToggle) Entities.Get().GlowEntities();
     }
 }
