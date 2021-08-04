@@ -268,6 +268,114 @@ public class Entities extends Offsets
         MemManager.Get().WriteBool(pEnt + m_bSpotted, bNewSpotted);
     }
 
+    private EClassIndex GetEntClassId(long pEnt)
+    {
+        int iClassId = MemManager.Get().ReadInt(
+            MemManager.Get().ReadDWORD(
+                MemManager.Get().ReadDWORD(
+                    MemManager.Get().ReadDWORD((pEnt + 0x8) + 0x8) + 0x1) + 0x14));
+        return EClassIndex.valueOf(iClassId);
+    }
+
+    private float[] GetClassGlowColor(long pEnt)
+    {
+        float flRed = 0f, flGreen = 0f, flBlue = 0f;
+        float[] Black = new float[]{0.f, 0f, 0f};
+
+        if (pEnt == 0)
+            return Black;
+
+        switch (GetEntClassId(pEnt))
+        {
+        case CCSPlayer:
+        {
+            if (Dormant(pEnt))
+                return Black;
+
+            int iHp = Health(pEnt);
+
+            if (iHp <= 0)
+                return Black;
+
+            int iTeam = Team(pEnt);
+
+            if (iTeam <= 1 || iTeam == Team(LocalPlayer()) && !DangerZone())
+                return Black;
+
+            flGreen = Math.min(iHp * 2.55f, 255.f);
+            flRed = 255.f - flGreen;
+            break;
+        }
+        case CWeaponGlock:
+        case CWeaponHKP2000:
+        {
+            if(EWeaponType.WeaponTypeFromId(CurrentWeaponId(LocalPlayer())) != EWeaponType.WEAPONTYPE_KNIFE)
+                return Black;
+        }
+        case CDEagle:
+        case CWeaponSSG08:
+        case CWeaponAWP:
+        case CWeaponSCAR20:
+        case CWeaponG3SG1:
+        case CWeaponShield:
+        case CPhysPropWeaponUpgrade:
+        {
+            flRed = 0.f;
+            flBlue = 255.f;
+            break;
+        }
+        case CItem_Healthshot:
+        case CPhysPropLootCrate:
+        {
+            flGreen = 255.f;
+            flRed = 255.f;
+            flBlue = 255.f;
+            break;
+        }
+        case CC4:
+        case CHostage:
+        case CPhysPropAmmoBox:
+        {
+            flGreen = 255.f;
+            flRed = 128.f;
+            break;
+        }
+        case CPhysPropRadarJammer:
+        {
+            flGreen = 50.f;
+            flRed = 50.f;
+            flBlue = 50.f;
+            break;
+        }
+        case CPlantedC4:
+        case CBreachChargeProjectile: break;
+        default: return Black;
+        }
+
+        return new float[]{flRed, flGreen, flBlue};
+    }
+
+    public void GlowEntities()
+    {
+        long pGlowObjectManager = MemManager.Get().ReadDWORD(MemManager.Get().Client() + dwGlowObjectManager);
+        int iCount = MemManager.Get().ReadInt(MemManager.Get().Client() + dwGlowObjectManager + 0xC);
+        for(int i = 0; i <= iCount; i++)
+        {
+            long dwEnt = MemManager.Get().ReadDWORD(pGlowObjectManager + (i * 0x38) + 0x4);
+
+            float[] RGB = GetClassGlowColor(dwEnt);
+
+            MemManager.Get().WriteFloat(pGlowObjectManager + (i * 0x38) + 0x8, RGB[0] / 255.f);
+            MemManager.Get().WriteFloat(pGlowObjectManager + (i * 0x38) + 0xC, RGB[1] / 255.f);
+            MemManager.Get().WriteFloat(pGlowObjectManager + (i * 0x38) + 0x10, RGB[2] / 255.f);
+            MemManager.Get().WriteFloat(pGlowObjectManager + (i * 0x38) + 0x14, 1.0f);
+            MemManager.Get().WriteBool(pGlowObjectManager + (i * 0x38) + 0x26, true);
+            MemManager.Get().WriteInt(pGlowObjectManager + (i * 0x38) + 0x30, 0);
+            MemManager.Get().WriteBool(pGlowObjectManager + (i * 0x38) + 0x28, true);
+            MemManager.Get().WriteBool(pGlowObjectManager + (i * 0x38) + 0x29, false);
+        }
+    }
+
     public Matrix3x4[] BoneMatrix(long pEnt)
     {
         long dwBoneMatrix = MemManager.Get().ReadDWORD(pEnt + m_dwBoneMatrix);

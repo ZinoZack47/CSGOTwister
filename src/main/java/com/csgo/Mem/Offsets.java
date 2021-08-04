@@ -29,4 +29,5 @@ public abstract class Offsets
     protected final static long dwLocalPlayer = 0xD8A2DC;
     protected final static long m_bDormant = 0xED;
     protected final static long m_pStudioHdr = 0x294C;
+    protected final static long dwGlowObjectManager = 0x52EB650;
 }

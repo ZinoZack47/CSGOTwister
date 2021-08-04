@@ -221,6 +221,13 @@ public final class MemManager
         kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Float.BYTES, null);
     }
 
+    public void WriteInt(long dwAddress, int flValue)
+    {
+        Memory mOutput = new Memory(Integer.BYTES);
+        mOutput.setFloat(0, flValue);
+        kernel32.WriteProcessMemory(hProc, new Pointer(dwAddress), mOutput, Integer.BYTES, null);
+    }
+
     public void WriteBool(long dwAddress, boolean bValue)
     {
         Memory mOutput = new Memory(Byte.BYTES);

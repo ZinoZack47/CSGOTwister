@@ -288,6 +288,11 @@ public enum EClassIndex
 	SporeExplosion,
 	SporeTrail;
 
+    public static EClassIndex valueOf(int id)
+    {
+        return EClassIndex.values()[id+1];
+    }
+
     public int Index()
     {
         return -1 + ordinal();
