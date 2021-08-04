@@ -16,7 +16,7 @@ public class Radar
 
     public static void Execute()
     {
-        if(MemManager.Get().isKeyPressed(Win32VK.VK_F5))
+        if(MemManager.Get().isKeyPressed(Win32VK.VK_NUMPAD2))
         {
             bToggle = !bToggle;
         }

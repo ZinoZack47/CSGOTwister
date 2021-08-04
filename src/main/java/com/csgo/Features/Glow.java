@@ -9,7 +9,7 @@ public class Glow
     private static boolean bToggle = false;
     public static void Execute()
     {
-        if(MemManager.Get().isKeyPressed(Win32VK.VK_F5))
+        if(MemManager.Get().isKeyPressed(Win32VK.VK_NUMPAD1))
         {
             bToggle = !bToggle;
         }
