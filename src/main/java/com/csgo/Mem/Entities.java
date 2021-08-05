@@ -270,10 +270,10 @@ public class Entities extends Offsets
 
     private EClassIndex GetEntClassId(long pEnt)
     {
-        int iClassId = MemManager.Get().ReadInt(
-            MemManager.Get().ReadDWORD(
-                MemManager.Get().ReadDWORD(
-                    MemManager.Get().ReadDWORD(pEnt + 0x8) + 0x8) + 0x1) + 0x14);
+        long pClientNetworkable = MemManager.Get().ReadDWORD(pEnt + 0x8);
+        long VTable3rdFunc = MemManager.Get().ReadDWORD(pClientNetworkable + 0x8);
+        long pClientClass = MemManager.Get().ReadDWORD(VTable3rdFunc + 0x1);
+        int iClassId = MemManager.Get().ReadInt(pClientClass + 0x14);
         return EClassIndex.valueOf(iClassId);
     }
 
